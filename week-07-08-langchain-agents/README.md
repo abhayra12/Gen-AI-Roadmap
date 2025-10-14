@@ -1,76 +1,50 @@
-# Week 7-8: LangChain, Agents & Advanced RAG
+# 📖 Week 7-8: LangChain, Agents, & Advanced RAG
 
-**Duration:** 2 weeks  
-**Difficulty:** Advanced  
-**Prerequisites:** Week 5-6 completed
+**Phase 4: Agents & Advanced RAG**  
+**Goal:** Build complex, multi-step AI applications and autonomous agents using high-level frameworks like LangChain and LangGraph.
 
 ---
 
 ## 📚 Module Overview
 
-Master LangChain framework, build intelligent AI agents with LangGraph, and implement advanced RAG patterns.
+This module is about orchestration. You will move beyond single-shot Q&A to build sophisticated applications that can reason, plan, and use tools to accomplish complex tasks. You will master LangChain for rapid application development and LangGraph for creating robust, stateful, and even multi-agent systems.
 
 ### Learning Objectives
-
-- ✅ Master LangChain framework
-- ✅ Build AI agents with tools
-- ✅ Implement advanced RAG patterns
-- ✅ Use LangGraph for orchestration
-- ✅ Deploy production agent systems
+By the end of this module, you will be able to:
+- ✅ Compose complex AI workflows using the LangChain Expression Language (LCEL).
+- ✅ Implement advanced RAG patterns like query transformation, routing, and re-ranking.
+- ✅ Understand and build with LangGraph to create cyclical, stateful AI graphs.
+- ✅ Design and implement AI agents that can use tools (e.g., search, code execution) to solve problems.
+- ✅ Build a multi-agent system where different agents collaborate to achieve a goal.
+- ✅ Implement cutting-edge techniques like Corrective RAG (CRAG) for self-improving systems.
 
 ---
 
-## 📓 Notebooks (15 total)
+## 📓 Notebooks & Concepts
 
-### LangChain Fundamentals (1-4)
-1. **LangChain Essentials** - Framework overview, core concepts
-2. **Message Structure** - System, Human, AI messages
-3. **Prompt Templates & Chains** - LCEL, chain composition
-4. **Runnable Sequences** - Parallel execution, error handling
+This module contains an extensive set of 15 notebooks covering LangChain, advanced RAG, and agentic AI with LangGraph:
 
-### Advanced RAG (5-10)
-5. **Document Loaders** - PDF, web, custom loaders
-6. **Vector Databases** - ChromaDB, FAISS comparison
-7. **Advanced RAG Patterns** - Multi-query, hierarchical
-8. **Query Optimization** - Transformation, routing
-9. **Query Transformation** - Rewrite, decomposition
-10. **RAG Fusion & Reranking** - Score fusion, rerankers
-
-### Agentic AI (11-15)
-11. **LangGraph Introduction** - State graphs, workflows
-12. **Building Agents** - ReAct, tool calling
-13. **Agentic AI Tools** - Custom tools, multi-tool agents
-14. **Agent State Management** - Persistence, checkpointing
-15. **Corrective RAG (CRAG)** - Self-correction, grading
+| Area                  | Notebooks                               | Key Concepts                                       |
+|-----------------------|-----------------------------------------|----------------------------------------------------|
+| **LangChain Core**    | `01` - `04`                             | LCEL, Prompt Templates, Chains, Runnables          |
+| **Advanced RAG**      | `05` - `10`                             | Document Loaders, Vector DBs, Query Transformation, RAG Fusion, Re-ranking |
+| **Agentic AI**        | `11` - `15`                             | LangGraph, State Management, Tool Use, Multi-Agent Systems, CRAG |
 
 ---
 
 ## 📝 Homework: Multi-Agent Data Analysis System
 
-Build an agent system that can analyze data, generate insights, and create visualizations autonomously.
+**Objective:** Build a collaborative multi-agent system to perform data analysis.
 
-**Points:** 100 (see HOMEWORK.md)
+**Task:**
+Create a system with at least two agents (e.g., a "Data Analyst Agent" and a "Visualization Agent") that work together. The system should be able to take a dataset and a high-level user query, perform analysis, and generate both textual insights and a data visualization.
 
----
-
-## 🎯 Checkpoint 4: Intelligent Agent
-
-Create an agent that:
-- Makes decisions autonomously
-- Uses multiple tools
-- Handles errors gracefully
-- Maintains conversation state
+- **Instructions:** See the `HOMEWORK.md` file in this directory for detailed instructions.
 
 ---
 
-## 📚 Resources
+## 🎯 What's Next?
 
-- [LangChain Documentation](https://python.langchain.com/)
-- [LangGraph Tutorials](https://langchain-ai.github.io/langgraph/)
-- [Advanced RAG Guide](https://blog.langchain.dev/deconstructing-rag/)
+You've learned to build intelligent systems that can retrieve knowledge and take action. Now it's time to learn how to create and customize the models themselves in **Week 9-10: Training & Fine-Tuning**. You will dive deep into the mechanics of model training and learn how to adapt pre-trained models to your specific needs.
 
----
-
-<div align="center">
-Week 7-8 | Agents & Advanced RAG | Build autonomous AI! 🤖
-</div>
+**Let's build autonomous agents!** 🤖
