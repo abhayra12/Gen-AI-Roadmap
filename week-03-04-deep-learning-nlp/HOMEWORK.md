@@ -6,68 +6,50 @@
 
 ---
 
-## 🎯 Assignment: Multi-lingual Text Classifier
+## 🎯 Assignment: Manufacturing Document Classifier for Copilot
 
-Build a production-ready text classification system using transformers and HuggingFace.
+**Objective:** Build a robust text classification system using transformers to automatically categorize documents from a manufacturing environment. This classifier will be a core component of our Manufacturing Copilot, helping it understand and route information efficiently.
 
 ---
 
 ## 📊 Project Requirements
 
-### Task Options (Choose One)
+### Task: Maintenance Log Severity Classification
 
-**Option 1: Sentiment Analysis**
-- Multi-lingual product reviews
-- Classify: Positive/Negative/Neutral
-- Support: English, Hindi, Tamil
+Your task is to build a multi-class text classifier that categorizes maintenance logs into one of three severity levels: **Normal**, **Warning**, or **Critical**.
 
-**Option 2: Topic Classification**
-- News article categorization
-- Categories: Business, Tech, Sports, Entertainment
-- Multi-label classification
-
-**Option 3: Language Detection**
-- Identify language of text
-- Support 10+ Indian languages
-- Handle code-mixed text
+- **Dataset:** You will create a synthetic dataset of at least 100 maintenance log entries. Each entry should be a realistic sentence or short paragraph describing a factory event.
+- **Classes:**
+    - `Normal (0)`: Routine operations, scheduled maintenance, successful checks.
+    - `Warning (1)`: Minor deviations, potential issues, observations requiring monitoring.
+    - `Critical (2)`: System failures, safety alerts, production stoppages.
 
 ---
 
 ## 📋 Deliverables
 
 ### Part 1: Data Preparation (20 points)
-- Collect or use existing dataset (min 5000 samples)
-- Clean and preprocess text
-- Split train/val/test (70/15/15)
-- Handle class imbalance
-- Create data loaders
+- Create a synthetic dataset of at least 100 samples in a CSV or JSON file.
+- Ensure a reasonable balance between the three classes.
+- Split the data into training, validation, and test sets (e.g., 70/15/15 split).
+- Load the data using HuggingFace `datasets` or PyTorch `Dataset`.
 
-### Part 2: Model Selection (15 points)
-- Research suitable HuggingFace models
-- Compare 3+ models on validation set
-- Document selection criteria
-- Justify final choice
+### Part 2: Model Selection & Fine-tuning (35 points)
+- Choose a suitable pre-trained model from the HuggingFace Hub (e.g., `distilbert-base-uncased`, `bert-base-uncased`). Justify your choice.
+- Fine-tune the model on your training dataset using the `Trainer` API.
+- Implement a `compute_metrics` function to track accuracy during evaluation.
+- Save the best-performing model checkpoint.
 
-### Part 3: Fine-tuning (30 points)
-- Fine-tune selected model
-- Track training metrics
-- Implement early stopping
-- Save best model
-- Document hyperparameters
+### Part 3: Evaluation (25 points)
+- Evaluate the fine-tuned model on the test set.
+- Report key metrics: accuracy, precision, recall, and F1-score (macro-averaged).
+- Generate and display a confusion matrix to visualize model performance.
+- Conduct an error analysis: identify a few examples where the model failed and hypothesize why.
 
-### Part 4: Evaluation (20 points)
-- Comprehensive metrics (accuracy, F1, precision, recall)
-- Confusion matrix
-- Error analysis
-- Performance by class
-- Comparison with baseline
-
-### Part 5: Deployment (15 points)
-- Create inference script
-- Build simple API (FastAPI)
-- Test with new examples
-- Document usage
-- Provide demo
+### Part 4: Inference & Deployment (20 points)
+- Create a simple inference pipeline using the fine-tuned model.
+- Write a script or function that takes a new, unseen maintenance log as input and outputs the predicted severity.
+- (Optional but Recommended) Build a simple web interface using Gradio or Streamlit to demonstrate your classifier.
 
 ---
 
@@ -75,110 +57,105 @@ Build a production-ready text classification system using transformers and Huggi
 
 | Component | Excellent (90-100%) | Good (80-89%) | Satisfactory (70-79%) | Needs Work (<70%) |
 |-----------|-------------------|---------------|---------------------|------------------|
-| **Data Preparation** | Clean, well-documented, balanced | Minor issues, good docs | Basic preparation | Significant issues |
-| **Model Selection** | Thorough comparison, justified | Good comparison | Basic justification | Poor selection process |
-| **Fine-tuning** | Optimal hyperparameters, tracked | Good training, some tracking | Basic training | Poor training |
-| **Evaluation** | Comprehensive analysis | Good metrics | Basic evaluation | Incomplete |
-| **Deployment** | Production-ready API | Working API | Basic script | Non-functional |
+| **Data Preparation** | High-quality, realistic, well-balanced data. | Good data, minor balance issues. | Basic dataset, some unrealistic samples. | Incomplete or poorly formatted data. |
+| **Model Fine-tuning** | Optimal model choice and training process. | Good training, minor hyperparameter issues. | Basic training completed. | Model does not train or converge. |
+| **Evaluation** | Comprehensive metrics and insightful error analysis. | Good metrics, basic error analysis. | Basic metrics reported. | Incomplete or missing evaluation. |
+| **Inference** | Clean, functional inference script/demo. | Working inference script. | Basic script with minor bugs. | Non-functional inference. |
 
 ---
 
 ## 📦 Submission Structure
 
+Organize your project in a clean, readable format.
+
 ```
 homework/week-03-04/
-├── README.md
-├── text_classifier.ipynb
-├── requirements.txt
+├── README.md                 # Project overview, instructions to run
+├── maintenance_classifier.ipynb # Your main notebook
+├── requirements.txt          # Required packages
 ├── data/
-│   ├── train.csv
-│   ├── val.csv
-│   └── test.csv
-├── models/
-│   └── best_model/
-├── src/
-│   ├── data_prep.py
-│   ├── train.py
-│   └── inference.py
-├── api/
-│   └── app.py
-└── reports/
-    ├── model_comparison.md
-    └── evaluation_report.md
+│   └── maintenance_logs.csv    # Your synthetic dataset
+└── saved_model/                # Your fine-tuned model files
 ```
 
 ---
 
 ## 💡 Implementation Tips
 
-### Data Collection
+### Data Creation
 ```python
-# Use HuggingFace datasets
-from datasets import load_dataset
+import pandas as pd
 
-dataset = load_dataset("imdb")  # Example
-# Or create custom dataset
+data = {
+    'text': [
+        'Routine lubrication of conveyor belt completed.',
+        'Slight increase in motor temperature observed on Line 2.',
+        'Emergency shutdown of hydraulic press due to pressure loss.'
+        # ... more samples
+    ],
+    'label': [0, 1, 2] # 0:Normal, 1:Warning, 2:Critical
+}
+df = pd.DataFrame(data)
+df.to_csv('data/maintenance_logs.csv', index=False)
 ```
 
 ### Model Fine-tuning
 ```python
-from transformers import AutoModelForSequenceClassification, Trainer
+from transformers import AutoModelForSequenceClassification, Trainer, TrainingArguments
+from datasets import load_dataset
+
+# Load your data
+dataset = load_dataset('csv', data_files='data/maintenance_logs.csv')
+
+# ... (tokenize and split data) ...
 
 model = AutoModelForSequenceClassification.from_pretrained(
-    "bert-base-multilingual-cased",
+    "distilbert-base-uncased",
     num_labels=3
 )
+
+training_args = TrainingArguments(...)
 
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=val_dataset
+    train_dataset=tokenized_train_dataset,
+    eval_dataset=tokenized_val_dataset,
+    compute_metrics=compute_metrics
 )
+trainer.train()
 ```
 
-### API Example
+### Inference
 ```python
-from fastapi import FastAPI
 from transformers import pipeline
 
-app = FastAPI()
-classifier = pipeline("text-classification", model="./models/best_model")
+classifier = pipeline(
+    "text-classification",
+    model="./saved_model"
+)
 
-@app.post("/classify")
-def classify_text(text: str):
-    result = classifier(text)
-    return {"prediction": result}
+new_log = "Vibration levels on the main pump are exceeding the upper threshold."
+result = classifier(new_log)
+print(result)
 ```
-
----
-
-## 🚀 Bonus Challenges (+10 points each)
-
-1. **Multi-lingual Support**: Handle 5+ languages
-2. **Ensemble Model**: Combine multiple models
-3. **Attention Visualization**: Show what model focuses on
-4. **Real-time API**: Deploy to cloud with <100ms latency
-5. **Mobile Optimization**: Quantize model for mobile deployment
 
 ---
 
 ## ✅ Submission Checklist
 
-- [ ] All code runs without errors
-- [ ] README is comprehensive
-- [ ] Model achieves >80% accuracy
-- [ ] API is functional
-- [ ] Evaluation report is detailed
-- [ ] Code is well-commented
-- [ ] Committed to GitHub
-- [ ] Updated progress tracker
+- [ ] All code runs without errors.
+- [ ] The `README.md` file is clear and provides instructions.
+- [ ] The model achieves a reasonable accuracy on the test set (>75% is a good target).
+- [ ] The inference script correctly classifies new logs.
+- [ ] The code is well-commented and easy to understand.
+- [ ] The project is committed to your GitHub repository.
 
 ---
 
 **Due Date:** End of Week 4  
-**Submit via:** GitHub repository
+**Submit via:** GitHub repository link.
 
 <div align="center">
-Week 3-4 Homework | Text Classification with Transformers 🤖
+Good luck building your Manufacturing Copilot component! 🏭🤖
 </div>
