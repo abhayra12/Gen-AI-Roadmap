@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "manufacturing-copilot-api"
+version = "0.1.0"
+description = "API for the Manufacturing Copilot"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "0.103.2"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+pydantic = "^1.10.12"
+python-dotenv = "^1.0.0"
+gunicorn = "^21.2.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.4.2"
+requests = "^2.31.0"
+locust = "^2.16.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

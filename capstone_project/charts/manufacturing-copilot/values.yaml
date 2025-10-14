@@ -1,0 +1,38 @@
+# Default values for manufacturing-copilot chart.
+replicaCount: 2
+
+image:
+  repository: us-central1-docker.pkg.dev/my-gcp-project/copilot-repo/copilot-api
+  pullPolicy: IfNotPresent
+  # tag is overridden at deploy time, e.g., with the Git SHA
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75
+
+# PodDisruptionBudget ensures high availability during voluntary disruptions.
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Application-specific configuration
+config:
+  plantId: "PUNE-IN"
+  logLevel: "INFO"
+  enableTranslation: false
+
+# Resource requests and limits for the container
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1Gi"
+  limits:
+    cpu: "1"
+    memory: "2Gi"

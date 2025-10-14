@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "manufacturing-copilot.fullname" . }}
+  labels:
+    {{- include "manufacturing-copilot.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "manufacturing-copilot.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "manufacturing-copilot.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        # Main application container
+        - name: api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: LOG_LEVEL
+              value: {{ .Values.config.logLevel | quote }}
+            - name: PLANT_ID
+              value: {{ .Values.config.plantId | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+        # Sidecar container for retrieval
+        - name: retriever-sidecar
+          image: "us-docker.pkg.dev/vertex-ai/vector-search-sidecar:latest"
+          args:
+            - "--db-uri=$(CHROMA_DB_URI)"
+            - "--port=8081"
+          env:
+            - name: CHROMA_DB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: chroma-db-secret
+                  key: uri
+          ports:
+            - name: grpc
+              containerPort: 8081

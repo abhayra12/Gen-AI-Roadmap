@@ -1,0 +1,6 @@
+# This file is required for Cloud Functions to install dependencies.
+# For this simple function, we only need the Functions Framework.
+# In a real project, you would add other dependencies like google-cloud-bigquery.
+
+functions-framework==3.*
+flask
