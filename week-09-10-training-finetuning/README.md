@@ -1,76 +1,49 @@
-# Week 9-10: Model Training & Fine-tuning
+# 📖 Week 9-10: Training & Fine-Tuning
 
-**Duration:** 2 weeks  
-**Difficulty:** Advanced  
-**Prerequisites:** Week 7-8 completed
+**Phase 5: Training & Fine-tuning**  
+**Goal:** Learn to train, fine-tune, and evaluate LLMs to adapt them for specialized tasks.
 
 ---
 
 ## 📚 Module Overview
 
-Learn to train and fine-tune LLMs using modern techniques like LoRA, QLoRA, and PEFT.
+In this module, you will go under the hood of LLMs to understand how they are trained and how you can customize them. You will start by building a simple language model from scratch to grasp the core mechanics. Then, you will master powerful and efficient fine-tuning techniques (PEFT, LoRA, QLoRA) to specialize pre-trained models for domain-specific tasks without the need for massive computational resources.
 
 ### Learning Objectives
-
-- ✅ Understand model pre-training
-- ✅ Implement training loops
-- ✅ Master fine-tuning techniques
-- ✅ Use LoRA and QLoRA
-- ✅ Evaluate fine-tuned models
-- ✅ Optimize for efficiency
-
----
-
-## 📓 Notebooks (11 total)
-
-### Training Fundamentals (1-6)
-1. **Pre-training Concepts** - Training objectives, data preparation
-2. **Bigram Model** - Language modeling basics
-3. **Tensors & Matrices** - GPU acceleration, operations
-4. **Forward & Backward Pass** - Gradient computation
-5. **MLP Implementation** - Feed-forward networks
-6. **Mini-batch Training** - Batch processing, optimization
-
-### Fine-tuning (7-11)
-7. **Fine-tuning vs RAG** - When to use each approach
-8. **PEFT Introduction** - Parameter-efficient methods
-9. **LoRA & QLoRA** - Low-rank adaptation, quantization
-10. **Fine-tuning Practical** - Complete fine-tuning pipeline
-11. **Model Evaluation** - Metrics, benchmarking
+By the end of this module, you will be able to:
+- ✅ Understand the fundamental concepts of model pre-training.
+- ✅ Build a simple language model and its training loop from scratch using PyTorch.
+- ✅ Know when to use fine-tuning versus RAG for a given problem.
+- ✅ Implement Parameter-Efficient Fine-Tuning (PEFT) techniques like LoRA and QLoRA.
+- ✅ Fine-tune a powerful open-source LLM on a custom dataset.
+- ✅ Establish a robust framework for evaluating the performance of your fine-tuned model.
 
 ---
 
-## 📝 Homework: Fine-tune Model for Domain Task
+## 📓 Notebooks & Concepts
 
-Fine-tune an LLM for manufacturing-specific language understanding.
+This module is split into two parts: training fundamentals and advanced fine-tuning, covered across 11 notebooks:
 
-**Task:** Fine-tune model to:
-- Understand technical terminology
-- Generate maintenance reports
-- Answer domain-specific questions
-
-**Points:** 100 (see HOMEWORK.md)
+| Area                  | Notebooks       | Key Concepts                                       |
+|-----------------------|-----------------|----------------------------------------------------|
+| **Training from Scratch** | `01` - `06`     | Pre-training, Bigram Model, Forward/Backward Pass, MLP, Mini-batching |
+| **Fine-Tuning**       | `07` - `11`     | Fine-tuning vs. RAG, PEFT, LoRA, QLoRA, Evaluation Metrics |
 
 ---
 
-## 🎯 Checkpoint 5: Fine-tuned Model
+## 📝 Homework: Fine-Tune for Maintenance Ticket Classification
 
-Deliverables:
-- Fine-tuned model on custom data
-- Performance improvement over base model
-- Comprehensive evaluation report
-- Deployed inference endpoint
+**Objective:** Specialize an LLM to understand and classify maintenance requests.
 
----
+**Task:**
+You will use a provided dataset of maintenance tickets to fine-tune a pre-trained LLM. The goal is to create a model that can accurately classify new tickets into categories like `Mechanical`, `Electrical`, or `Software`, enabling automated routing.
 
-## 📚 Resources
-
-- [HuggingFace Fine-tuning Guide](https://huggingface.co/docs/transformers/training)
-- [LoRA Paper](https://arxiv.org/abs/2106.09685)
-- [PEFT Library](https://github.com/huggingface/peft)
+- **Instructions:** See the `HOMEWORK.md` file in this directory for detailed instructions.
 
 ---
 
-<div align="center">
-Week 9-10 | Training & Fine-tuning | Master model adaptation! 🎯
-</div>
+## 🎯 What's Next?
+
+You have now covered the full spectrum of creating and customizing AI models. You are ready for the final and most critical phase: **Week 11-12: Production & Deployment**. In this capstone module, you will take everything you've learned and build a single, production-grade, end-to-end AI application.
+
+**Time to forge your own models!** 🔥
