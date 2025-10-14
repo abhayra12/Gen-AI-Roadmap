@@ -6,195 +6,113 @@
 
 ---
 
-## 🎯 Assignment Overview
+## 🎯 Assignment: Predictive Maintenance for Manufacturing Equipment
 
-**Objective:** Build a complete data analysis and machine learning pipeline for manufacturing quality control.
+**Objective:** Apply your Python and ML skills to predict equipment failure based on sensor data from a manufacturing environment.
 
-**Skills Demonstrated:**
-- Data loading and cleaning
-- Exploratory Data Analysis
-- Feature engineering
-- Model training and evaluation
-- Code organization and documentation
+**Task:**
+Build a complete data analysis and machine learning pipeline that:
+1.  Loads and explores a predictive maintenance dataset.
+2.  Performs comprehensive Exploratory Data Analysis (EDA) with visualizations to identify patterns that may lead to equipment failure.
+3.  Preprocesses the data, which includes handling categorical features, scaling numerical data, and splitting the dataset for training and testing.
+4.  Trains multiple classification models to predict the likelihood of machine failure.
+5.  Evaluates and compares the performance of these models using metrics like F1-score, ROC-AUC, and confusion matrices.
+6.  Generates actionable insights and recommendations for the maintenance team based on the best-performing model.
 
----
-
-## 📊 Dataset
-
-**Dataset:** Manufacturing Quality Control Data  
-**File:** `datasets/manufacturing/quality_data.csv`
+**Dataset:** A simulated predictive maintenance dataset will be used. This dataset contains sensor readings and operational data from various machines.
 
 ### Dataset Description
-Simulated manufacturing data with:
-- **Product Features:** Dimensions, weight, temperature, pressure
-- **Process Parameters:** Machine settings, operator, shift
-- **Quality Metrics:** Defect type, severity, pass/fail
+The dataset contains real-time data collected from sensors on manufacturing equipment. Each row represents a snapshot of a machine's state at a given time.
 
 ### Columns
-- `product_id`: Unique identifier
-- `production_date`: Manufacturing date
-- `machine_id`: Machine used
-- `operator_id`: Operator ID
-- `shift`: Day/Night shift
-- `dimension_x`, `dimension_y`, `dimension_z`: Product dimensions (mm)
-- `weight`: Product weight (g)
-- `temperature`: Processing temperature (°C)
-- `pressure`: Processing pressure (bar)
-- `defect_type`: Type of defect (if any)
-- `severity`: Low/Medium/High
-- `quality_status`: Pass/Fail
+-   `UDI`: Unique identifier for each data point.
+-   `Product ID`: Identifier for the product being worked on.
+-   `Type`: Quality variant of the product (L, M, H for Low, Medium, High).
+-   `Air temperature [K]`: Ambient air temperature in Kelvin.
+-   `Process temperature [K]`: Temperature of the manufacturing process in Kelvin.
+-   `Rotational speed [rpm]`: Rotational speed of the machine's tool in revolutions per minute.
+-   `Torque [Nm]`: Torque exerted by the tool in Newton-meters.
+-   `Tool wear [min]`: Wear on the tool in minutes of usage.
+-   `Machine failure`: Target variable. `1` if the machine failed, `0` otherwise.
+-   `Failure_Type`: The type of failure (e.g., Tool Wear Failure, Heat Dissipation Failure, etc.). This can be used for more detailed analysis.
 
 ---
 
 ## 📋 Task Breakdown
 
-### Part 1: Data Loading & Exploration (20 points)
+### Part 1: Data Loading & EDA (20 points)
 
 **Tasks:**
-1. Load the dataset using pandas
-2. Display basic information (shape, dtypes, memory usage)
-3. Check for missing values
-4. Generate summary statistics
-5. Identify data quality issues
+1.  Load the predictive maintenance dataset.
+2.  Display basic information (`.info()`, `.describe()`).
+3.  Check for missing values and assess data quality.
+4.  Visualize the distribution of the target variable (`Machine failure`).
+5.  Create at least four other visualizations (e.g., correlation heatmap, feature distributions by failure type) to understand the data.
 
 **Deliverables:**
-- Code cells showing data loading
-- Summary table of data characteristics
-- List of identified issues
-
-**Rubric:**
-- Correct data loading (5 pts)
-- Comprehensive data inspection (10 pts)
-- Clear documentation (5 pts)
+-   Code cells for loading and initial inspection.
+-   A summary of your data quality findings.
+-   At least five high-quality, labeled visualizations with written insights for each.
 
 ---
 
-### Part 2: Exploratory Data Analysis (25 points)
+### Part 2: Data Preprocessing (20 points)
 
 **Tasks:**
-1. **Univariate Analysis**
-   - Distribution of numerical features
-   - Frequency of categorical features
-   - Identify outliers
-
-2. **Bivariate Analysis**
-   - Correlation between features
-   - Quality status vs features
-   - Defect patterns by machine/operator/shift
-
-3. **Visualizations** (minimum 6)
-   - Histograms for numerical features
-   - Bar plots for categorical features
-   - Correlation heatmap
-   - Boxplots for outlier detection
-   - Scatter plots for relationships
-   - Time series trends
+1.  **Feature Engineering**: Create at least one new feature from existing ones (e.g., `power = rotational_speed [rpm] * torque [Nm]`).
+2.  **Encode Categorical Variables**: Convert the `Type` column into a numerical format using one-hot encoding.
+3.  **Scale Numerical Features**: Use `StandardScaler` to scale the numerical features.
+4.  **Train-Test Split**: Split the data into 80% training and 20% testing sets. Ensure you use stratification on the target variable to maintain the same class distribution in both sets.
 
 **Deliverables:**
-- Minimum 6 high-quality visualizations
-- Written insights for each visualization
-- Summary of key findings
-
-**Rubric:**
-- Quality of visualizations (10 pts)
-- Depth of analysis (10 pts)
-- Insights quality (5 pts)
+-   A clean, well-documented preprocessing pipeline.
+-   A comparison of the data before and after preprocessing.
+-   The final, cleaned dataset ready for modeling.
 
 ---
 
-### Part 3: Data Preprocessing (20 points)
+### Part 3: Model Training & Evaluation (30 points)
 
 **Tasks:**
-1. **Handle Missing Values**
-   - Identify missing data patterns
-   - Choose appropriate strategy (imputation/removal)
-   - Implement solution
-
-2. **Feature Engineering**
-   - Create derived features
-   - Encode categorical variables
-   - Scale numerical features
-
-3. **Handle Outliers**
-   - Identify outliers
-   - Decide treatment strategy
-   - Apply corrections
-
-4. **Train-Test Split**
-   - Split data (80/20 or 70/30)
-   - Ensure stratification
-   - Verify split quality
+1.  **Train Multiple Models**: Train at least three different classification models (e.g., Logistic Regression, Random Forest, Gradient Boosting).
+2.  **Evaluate Performance**: For each model, calculate and report:
+    -   Accuracy, Precision, Recall, and F1-Score.
+    -   A confusion matrix to visualize true vs. predicted labels.
+3.  **Compare Models**: Create a summary table comparing the performance of all trained models.
+4.  **Feature Importance**: For your best-performing model (e.g., Random Forest), plot the feature importances to understand which factors are most predictive of failure.
 
 **Deliverables:**
-- Preprocessing pipeline code
-- Before/after comparison
-- Cleaned dataset ready for modeling
-
-**Rubric:**
-- Missing data handling (5 pts)
-- Feature engineering (7 pts)
-- Proper train-test split (5 pts)
-- Pipeline organization (3 pts)
+-   Training code for all models.
+-   A performance comparison table.
+-   A confusion matrix and feature importance plot for the best model.
+-   A brief justification for your choice of the best model.
 
 ---
 
-### Part 4: Model Training (25 points)
+### Part 4: Hyperparameter Tuning (15 points)
 
 **Tasks:**
-1. **Baseline Model**
-   - Train simple model (Logistic Regression or Decision Tree)
-   - Evaluate performance
-
-2. **Multiple Models**
-   - Train at least 3 different models:
-     - Logistic Regression
-     - Random Forest
-     - Gradient Boosting (XGBoost or similar)
-   
-3. **Hyperparameter Tuning**
-   - Use GridSearchCV or RandomizedSearchCV
-   - Optimize at least one model
-
-4. **Model Comparison**
-   - Compare all models on consistent metrics
-   - Select best model
+1.  **Select a Model**: Choose your best-performing model from Part 3.
+2.  **Define Parameter Grid**: Create a parameter grid for hyperparameter tuning (e.g., `n_estimators`, `max_depth` for a Random Forest).
+3.  **Perform Grid Search**: Use `GridSearchCV` with 5-fold cross-validation to find the optimal combination of parameters.
+4.  **Evaluate Tuned Model**: Report the performance of the tuned model on the test set and compare it to the default model to show the impact of tuning.
 
 **Deliverables:**
-- Training code for all models
-- Hyperparameter tuning results
-- Performance comparison table
-
-**Rubric:**
-- Model variety (8 pts)
-- Hyperparameter tuning (8 pts)
-- Proper evaluation (6 pts)
-- Model selection justification (3 pts)
+-   Code for the `GridSearchCV` setup and execution.
+-   The best parameters found by the grid search.
+-   A comparison of the tuned model's performance against the original.
 
 ---
 
-### Part 5: Model Evaluation & Insights (10 points)
+### Part 5: Project Summary & Conclusion (15 points)
 
 **Tasks:**
-1. **Evaluation Metrics**
-   - Accuracy, Precision, Recall, F1-Score
-   - Confusion Matrix
-   - ROC-AUC curve
-   - Feature importance
-
-2. **Business Insights**
-   - Which features most impact quality?
-   - Which machines/operators need attention?
-   - Recommendations for quality improvement
+1.  **Summarize Your Findings**: Write a brief summary of the project. What was the goal? What steps did you take? What were the key results?
+2.  **Conclusion**: What is your final recommendation? Which model should the manufacturing company use for predictive maintenance and why? What are the business implications?
+3.  **Reflection**: Briefly reflect on any challenges you faced and what you learned during the project.
 
 **Deliverables:**
-- Comprehensive evaluation report
-- Visualized confusion matrix and ROC curve
-- Feature importance plot
-- Business recommendations (2-3 paragraphs)
-
-**Rubric:**
-- Evaluation completeness (5 pts)
-- Business insights quality (5 pts)
+-   A well-written summary and conclusion section in your notebook.
 
 ---
 
