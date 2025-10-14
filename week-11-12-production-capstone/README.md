@@ -1,207 +1,53 @@
-# Week 11-12: Production Deployment & Capstone Project
+# 📖 Week 11-12: Production & Deployment
 
-**Duration:** 2 weeks  
-**Difficulty:** Advanced  
-**Prerequisites:** All previous weeks completed
+**Capstone: Production & Deployment**  
+**Goal:** Take everything you've learned and build a single, production-grade, end-to-end AI application.
 
 ---
 
 ## 📚 Module Overview
 
-Learn MLOps practices and deploy production-grade Gen AI applications. Complete your capstone project.
+This is the final module, where you transition from a student to a builder. You will take all the individual skills you've acquired—from RAG to fine-tuning to agentic design—and integrate them into a single, cohesive, deployed application. The notebooks in this module are conceptual guides; the actual implementation happens in the `capstone_project` directory.
 
 ### Learning Objectives
-
-- ✅ Master MLOps fundamentals
-- ✅ Build REST APIs with FastAPI
-- ✅ Containerize applications
-- ✅ Implement CI/CD pipelines
-- ✅ Deploy to cloud (GCP)
-- ✅ Monitor production systems
-
----
-
-## 📓 Notebooks (8 total)
-
-### Production Engineering (1-8)
-1. **MLOps Fundamentals** - ML lifecycle, versioning, tracking
-2. **FastAPI ML Serving** - REST APIs, validation, async
-3. **Docker Containerization** - Dockerfile, multi-stage builds
-4. **Monitoring & Logging** - Prometheus, Grafana, logging
-5. **CI/CD with GitHub Actions** - Automated testing, deployment
-6. **GCP Deployment** - Cloud Run, Cloud Storage, secrets
-7. **Terraform IaC** - Infrastructure as code, provisioning
-8. **Kubernetes Orchestration** - Pods, services, scaling
+By the end of this module, you will have hands-on experience with:
+- ✅ The complete MLOps lifecycle, from development to production.
+- ✅ Serving your AI application via a robust FastAPI backend.
+- ✅ Containerizing your application with Docker for portability.
+- ✅ Implementing a full CI/CD pipeline with GitHub Actions for automated testing and deployment.
+- ✅ Defining and managing your cloud infrastructure as code using Terraform.
+- ✅ Deploying your application to a scalable cloud service like GCP Cloud Run.
+- ✅ Orchestrating complex applications with Kubernetes and Helm (Advanced).
 
 ---
 
-## 🏭 Capstone Project
+## 📓 Conceptual Notebooks & The Capstone Project
 
-**See [CAPSTONE_PROJECT.md](../CAPSTONE_PROJECT.md) for complete details**
+The eight notebooks in this module serve as **conceptual guides** for the tasks you will perform to build and deploy the final capstone project. All the code you write will be part of the final project located in the top-level `capstone_project/` directory.
 
-### Project: Intelligent Manufacturing Quality Assistant
-
-**9 Implementation Phases:**
-
-#### Week 11
-- Phase 1: Foundation & Architecture (Days 1-2)
-- Phase 2: RAG System Implementation (Days 3-4)
-- Phase 3: Vision Agent for Quality (Days 5-6)
-- Phase 4: Agent Orchestration (Day 7)
-
-#### Week 12
-- Phase 5: API Development (Days 1-2)
-- Phase 6: Containerization (Days 3-4)
-- Phase 7: Infrastructure as Code (Day 5)
-- Phase 8: CI/CD Pipeline (Day 6)
-- Phase 9: Monitoring & Production (Day 7)
+| Notebook                            | Concept Covered                     | Corresponding Capstone Component |
+|-------------------------------------|-------------------------------------|----------------------------------|
+| `01_mlops_fundamentals.ipynb`       | MLOps Principles                    | Entire `capstone_project`        |
+| `02_fastapi_ml_serving.ipynb`       | API Development                     | `capstone_project/app/`          |
+| `03_docker_containerization.ipynb`  | Containerization                    | `capstone_project/Dockerfile`    |
+| `04_monitoring_logging.ipynb`       | Observability                       | `capstone_project/app/monitoring`|
+| `05_cicd_github_actions.ipynb`      | CI/CD Automation                    | `capstone_project/.github/`      |
+| `06_gcp_deployment.ipynb`           | Cloud Deployment                    | `capstone_project/scripts/`      |
+| `07_terraform_iac.ipynb`            | Infrastructure as Code              | `capstone_project/terraform/`    |
+| `08_kubernetes_orchestration.ipynb` | Orchestration (Advanced)            | `capstone_project/charts/`       |
 
 ---
 
-## 📝 Capstone Deliverables
+## 🚀 The Capstone Project: Manufacturing Copilot
 
-### Required Components
-1. **Complete Application**
-   - Vision-based quality inspection
-   - RAG-powered maintenance Q&A
-   - Multi-lingual report generation
-   - Agent orchestration with LangGraph
+This is the culmination of the entire course. You will build a multi-agent AI system for the manufacturing domain, integrating all the techniques you have learned.
 
-2. **Production Infrastructure**
-   - Dockerized services
-   - Terraform configuration
-   - GitHub Actions CI/CD
-   - GCP deployment
-
-3. **Documentation**
-   - Architecture diagram
-   - API documentation
-   - Deployment guide
-   - User manual
-
-4. **Demo & Presentation**
-   - Live demo
-   - Code walkthrough
-   - Results showcase
-   - Lessons learned
+- **For the full project brief, architecture, and requirements, see the main `CAPSTONE_PROJECT.md` file in the root directory.**
 
 ---
 
-## 🎯 Final Checkpoint: Capstone Presentation
+## 🎓 Final Assessment
 
-**Evaluation Criteria:**
+Your work will be assessed based on the final state of your `capstone_project` and a live presentation. This includes the functionality of the deployed application, the quality of your code, the robustness of your infrastructure, and your documentation.
 
-| Category | Weight | Requirements |
-|----------|--------|--------------|
-| **Functionality** | 30% | All features working |
-| **Code Quality** | 20% | Clean, documented code |
-| **Production Ready** | 25% | Deployed, monitored |
-| **Innovation** | 10% | Creative solutions |
-| **Presentation** | 15% | Clear demo, good docs |
-
-**Total:** 100 points
-
----
-
-## 📚 Resources
-
-### MLOps
-- [MLOps Zoomcamp](https://github.com/DataTalksClub/mlops-zoomcamp)
-- [Full Stack Deep Learning](https://fullstackdeeplearning.com/)
-
-### FastAPI
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [FastAPI Best Practices](https://github.com/zhanymkanov/fastapi-best-practices)
-
-### Docker & Kubernetes
-- [Docker Documentation](https://docs.docker.com/)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-
-### GCP
-- [GCP Documentation](https://cloud.google.com/docs)
-- [Cloud Run Guide](https://cloud.google.com/run/docs)
-
----
-
-## 💡 Success Tips
-
-### Week 11 (Implementation)
-- Start early with Phase 1
-- Test each phase thoroughly
-- Don't skip documentation
-- Ask for help when stuck
-- Commit progress daily
-
-### Week 12 (Deployment)
-- Follow deployment guide
-- Test in staging first
-- Monitor everything
-- Prepare demo carefully
-- Practice presentation
-
----
-
-## 🎓 What's Next After Completion?
-
-### Career Opportunities
-- Gen AI Engineer
-- ML Engineer
-- AI Solutions Architect
-- LLM Application Developer
-- MLOps Engineer
-
-### Continue Learning
-- Advanced fine-tuning techniques
-- Multi-modal AI
-- Edge deployment
-- Reinforcement learning with human feedback (RLHF)
-- Advanced agent frameworks
-
-### Build Portfolio
-- Open-source contributions
-- Blog posts about learnings
-- LinkedIn presence
-- GitHub showcase
-- Conference talks
-
----
-
-## ✅ Final Completion Checklist
-
-### Technical
-- [ ] All 55 notebooks completed
-- [ ] All 6 homework submitted
-- [ ] All 6 checkpoints passed
-- [ ] Capstone fully deployed
-- [ ] Documentation complete
-
-### Professional
-- [ ] GitHub repo polished
-- [ ] README comprehensive
-- [ ] Demo ready
-- [ ] LinkedIn updated
-- [ ] Portfolio showcased
-
----
-
-## 🎉 Congratulations!
-
-Upon completing this course, you will have:
-
-✅ **Deep Understanding** of Gen AI from basics to production  
-✅ **Hands-on Experience** with 55+ real-world implementations  
-✅ **Production Skills** deploying ML systems to cloud  
-✅ **Portfolio Project** that stands out to employers  
-✅ **Career Readiness** for Gen AI engineering roles  
-
-**You are now a Gen AI Master! 🚀**
-
----
-
-<div align="center">
-
-**Week 11-12** | Production & Capstone | Ship your masterpiece! 🎯
-
-[📖 Capstone Details](../CAPSTONE_PROJECT.md) | [🏠 Course Home](../README.md)
-
-</div>
+**Congratulations on making it to the final module. It's time to build and ship!** 🚀
