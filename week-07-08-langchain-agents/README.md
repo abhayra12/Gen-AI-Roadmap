@@ -22,13 +22,15 @@ By the end of this module, you will be able to:
 
 ## 📓 Notebooks & Concepts
 
-This module contains an extensive set of 15 notebooks covering LangChain, advanced RAG, and agentic AI with LangGraph:
+This module contains an extensive set of 16 notebooks covering LangChain, advanced RAG, and agentic AI with LangGraph:
 
 | Area                  | Notebooks                               | Key Concepts                                       |
 |-----------------------|-----------------------------------------|----------------------------------------------------|
 | **LangChain Core**    | `01` - `04`                             | LCEL, Prompt Templates, Chains, Runnables          |
 | **Advanced RAG**      | `05` - `10`                             | Document Loaders, Vector DBs, Query Transformation, RAG Fusion, Re-ranking |
-| **Agentic AI**        | `11` - `15`                             | LangGraph, State Management, Tool Use, Multi-Agent Systems, CRAG |
+| **Agentic AI**        | `11` - `16`                             | LangGraph, State Management, Tool Use, MCP, Multi-Agent Systems, CRAG |
+
+**NEW**: Notebook `16` introduces **Model Context Protocol (MCP)**, Anthropic's standard for connecting LLMs to external tools and data sources in a production-ready, reusable way.
 
 ---
 
