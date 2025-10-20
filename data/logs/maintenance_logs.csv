@@ -1,0 +1,5 @@
+ticket_id,timestamp_utc,details,technician
+T-101,2024-01-15T10:00:00Z,"Replaced hydraulic pump on Press 5",Technician Jane Smith
+T-102,2023-05-20T14:30:00Z,"Calibrated sensor on CNC machine 2. Technician John Doe was assigned.",Technician [REDACTED]
+T-103,2024-07-01T09:00:00Z,"Investigated vibration alarm on Press 7. Found loose bolt.",Technician Alex Ray
+T-104,2022-11-10T11:00:00Z,"Annual maintenance on conveyor belt system.",Technician Maria Garcia
