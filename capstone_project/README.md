@@ -20,7 +20,7 @@
 5. [Detailed Setup Guide](#-detailed-setup-guide)
 6. [API Documentation](#-api-documentation)
 7. [Testing](#-testing)
-8. [Deployment](#-deployment)
+8. [Deployment Options](#-deployment-options) ⭐ **NEW: Kubernetes**
 9. [Troubleshooting](#-troubleshooting)
 10. [Project Structure](#-project-structure)
 
@@ -671,52 +671,119 @@ pytest tests/ --cov=app --cov-report=html
 pytest tests/test_api.py -v
 ```
 
-## 🐳 Docker Deployment
+## � Deployment Options
 
-### Build the Docker image:
+### 1. Kubernetes (Production) ⭐ **Recommended**
+
+**Full Kubernetes deployment with Helm charts and plain manifests** for production environments.
+
+**Quick Start:**
 ```bash
-docker build -t manufacturing-copilot:latest .
+# Using Helm (recommended)
+./scripts/kubernetes/deploy-k8s.sh prod
+
+# Or using kubectl only
+kubectl apply -f kubernetes/ --namespace=manufacturing-copilot
 ```
 
-### Run the container:
+**Features:**
+- ✅ Horizontal Pod Autoscaling (2-10 replicas)
+- ✅ High Availability (Pod Disruption Budget)
+- ✅ Network Policies for security
+- ✅ Prometheus monitoring integration
+- ✅ Ingress with TLS support
+- ✅ Persistent storage for ChromaDB
+- ✅ Multi-cloud support (GKE, EKS, AKS)
+
+**📖 Complete Guide**: See [KUBERNETES_DEPLOYMENT.md](KUBERNETES_DEPLOYMENT.md) for:
+- GKE, EKS, AKS deployment guides
+- Minikube local development
+- Configuration and secrets management
+- Monitoring and scaling
+- Troubleshooting
+
+---
+
+### 2. Docker Compose (Development)
+
+**Quick local setup** for development and testing.
+
 ```bash
+# Start all services
+docker-compose up --build
+
+# Access API at http://localhost:8080/docs
+```
+
+Includes:
+- FastAPI backend
+- ChromaDB (if needed)
+- Auto-reload for development
+- Volume mounts for live code updates
+
+---
+
+### 3. Docker (Manual)
+
+**Build and run** the container manually:
+
+```bash
+# Build the Docker image
+docker build -t manufacturing-copilot:latest .
+
+# Run the container
 docker run -p 8080:8080 \
+  -e HUGGINGFACE_TOKEN=hf_your_token_here \
   -e LOG_LEVEL=INFO \
-  -e DATABASE_URL=postgresql://... \
   manufacturing-copilot:latest
 ```
 
-## ☁️ Cloud Deployment (GCP)
+---
 
-### Using Terraform:
+### 4. Cloud Run (Serverless GCP)
 
-1. **Navigate to terraform directory**:
-   ```bash
-   cd terraform
-   ```
+**Terraform-based deployment** to Google Cloud Run:
 
-2. **Initialize Terraform**:
-   ```bash
-   terraform init
-   ```
+```bash
+# Navigate to terraform directory
+cd terraform
 
-3. **Plan the deployment**:
-   ```bash
-   terraform plan -var="project_id=your-gcp-project"
-   ```
+# Initialize Terraform
+terraform init
 
-4. **Apply the configuration**:
-   ```bash
-   terraform apply -var="project_id=your-gcp-project"
-   ```
+# Plan the deployment
+terraform plan -var="project_id=your-gcp-project"
 
-### Using the deployment script:
+# Deploy
+terraform apply -var="project_id=your-gcp-project"
+```
+
+**Or using the deployment script:**
 ```bash
 python scripts/deploy_cloud_run.py \
   --project your-gcp-project \
   --region us-central1 \
   --service-name manufacturing-copilot
 ```
+
+---
+
+### Deployment Comparison
+
+| Feature | Kubernetes | Docker Compose | Docker | Cloud Run |
+|---------|------------|----------------|--------|-----------|
+| **Use Case** | Production | Development | Testing | Serverless |
+| **Scalability** | Auto-scaling | Manual | Manual | Auto-scaling |
+| **HA/Failover** | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
+| **Complexity** | High | Low | Low | Medium |
+| **Cost** | Medium | Free | Free | Pay-per-use |
+| **Setup Time** | 10 min | 2 min | 5 min | 10 min |
+
+**Choose:**
+- **Kubernetes** → Production deployments, enterprise environments
+- **Docker Compose** → Local development, quick testing
+- **Docker** → Simple testing, CI/CD builds
+- **Cloud Run** → Serverless, pay-per-request workloads
 
 ## 🔐 Security
 

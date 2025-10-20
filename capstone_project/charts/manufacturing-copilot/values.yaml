@@ -1,38 +1,275 @@
 # Default values for manufacturing-copilot chart.
+# This is a production-ready Helm chart for Kubernetes deployment
+
+# Number of pod replicas (overridden by HPA when enabled)
 replicaCount: 2
 
+# Container image configuration
 image:
-  repository: us-central1-docker.pkg.dev/my-gcp-project/copilot-repo/copilot-api
+  # Docker image repository (update with your registry)
+  # Options: Docker Hub, GCR, ECR, ACR, Harbor, etc.
+  repository: abhayra12/manufacturing-copilot
   pullPolicy: IfNotPresent
-  # tag is overridden at deploy time, e.g., with the Git SHA
+  # Image tag (overridden at deploy time with Git SHA or version)
   tag: "latest"
 
+# Image pull secrets for private registries
+imagePullSecrets: []
+# - name: regcred
+
+# Service account for pod identity
+serviceAccount:
+  create: true
+  annotations: {}
+  # Example for GKE Workload Identity:
+  # annotations:
+  #   iam.gke.io/gcp-service-account: copilot-sa@project.iam.gserviceaccount.com
+  name: "manufacturing-copilot-sa"
+
+# Pod security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# Container security context
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+
+# Kubernetes Service configuration
 service:
   type: ClusterIP
   port: 8080
+  targetPort: 8080
+  annotations: {}
+  # Example for AWS NLB:
+  # annotations:
+  #   service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 
+# Ingress configuration for external access
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    # Example for GKE:
+    # kubernetes.io/ingress.class: "gce"
+    # kubernetes.io/ingress.global-static-ip-name: "copilot-ip"
+  hosts:
+    - host: copilot.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: copilot-tls
+      hosts:
+        - copilot.example.com
+
+# Horizontal Pod Autoscaler (HPA)
 autoscaling:
   enabled: true
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: 80
+  # Advanced HPA metrics (requires metrics-server)
+  # metrics:
+  #   - type: Pods
+  #     pods:
+  #       metric:
+  #         name: http_requests_per_second
+  #       target:
+  #         type: AverageValue
+  #         averageValue: "1000"
 
-# PodDisruptionBudget ensures high availability during voluntary disruptions.
+# Pod Disruption Budget (PDB) for high availability
 podDisruptionBudget:
   enabled: true
   minAvailable: 1
+  # maxUnavailable: 1
 
-# Application-specific configuration
-config:
-  plantId: "PUNE-IN"
-  logLevel: "INFO"
-  enableTranslation: false
-
-# Resource requests and limits for the container
+# Resource requests and limits
 resources:
   requests:
     cpu: "500m"
     memory: "1Gi"
   limits:
-    cpu: "1"
-    memory: "2Gi"
+    cpu: "2"
+    memory: "4Gi"
+
+# Liveness probe (checks if app is running)
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# Readiness probe (checks if app is ready for traffic)
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 15
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# Startup probe (for slow-starting apps)
+startupProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 30
+
+# Node selector for pod placement
+nodeSelector: {}
+# Example:
+# nodeSelector:
+#   workload-type: api
+
+# Tolerations for pod scheduling
+tolerations: []
+# Example:
+# tolerations:
+#   - key: "workload"
+#     operator: "Equal"
+#     value: "api"
+#     effect: "NoSchedule"
+
+# Affinity rules for pod placement
+affinity: {}
+# Example for pod anti-affinity (spread across nodes):
+# affinity:
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#       - weight: 100
+#         podAffinityTerm:
+#           labelSelector:
+#             matchExpressions:
+#               - key: app.kubernetes.io/name
+#                 operator: In
+#                 values:
+#                   - manufacturing-copilot
+#           topologyKey: kubernetes.io/hostname
+
+# Application configuration (stored in ConfigMap)
+config:
+  appTitle: "Manufacturing Copilot API"
+  appVersion: "1.0.0"
+  logLevel: "INFO"
+  enableTelemetry: "true"
+  # Model configuration
+  vlmModelId: "Salesforce/blip2-opt-2.7b"
+  llmModelId: "meta-llama/Llama-2-7b-chat-hf"
+  embeddingModelId: "sentence-transformers/all-MiniLM-L6-v2"
+  # API configuration
+  maxRetries: "3"
+  requestTimeout: "60"
+  temperature: "0.7"
+  maxTokens: "512"
+  # ChromaDB configuration
+  chromaPersistDir: "/data/chroma_db"
+  # Authentication
+  validAuthTokenPrefix: "Bearer technician-"
+
+# Secrets (stored in Kubernetes Secret)
+# IMPORTANT: Do not commit actual secrets to Git!
+# Use external secrets management (Sealed Secrets, External Secrets Operator, etc.)
+secrets:
+  # HuggingFace API token (required)
+  huggingfaceToken: ""  # Set via --set secrets.huggingfaceToken=xxx or external secrets
+  # Database URL (optional for production logging)
+  databaseUrl: ""  # Set via external secrets in production
+
+# Persistent volume for ChromaDB data
+persistence:
+  enabled: true
+  storageClass: "standard"  # Change based on cloud provider (gp2, pd-standard, etc.)
+  accessMode: ReadWriteOnce
+  size: 10Gi
+  annotations: {}
+
+# PostgreSQL dependency (optional - for production logging)
+postgresql:
+  enabled: false
+  auth:
+    username: copilot
+    password: ""  # Set via external secrets
+    database: manufacturing_db
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+
+# Network Policy for pod-to-pod communication
+networkPolicy:
+  enabled: true
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+      ports:
+      - protocol: TCP
+        port: 8080
+  egress:
+    - to:
+      - namespaceSelector: {}
+      ports:
+      - protocol: TCP
+        port: 443  # HTTPS for HuggingFace API
+      - protocol: TCP
+        port: 53   # DNS
+      - protocol: UDP
+        port: 53   # DNS
+
+# Monitoring and observability
+monitoring:
+  enabled: true
+  # Prometheus ServiceMonitor
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    path: /metrics
+  # Grafana dashboard ConfigMap
+  grafanaDashboard:
+    enabled: true
+
+# Pod annotations
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/metrics"
+
+# Pod labels
+podLabels:
+  app: manufacturing-copilot
+  version: v1
+
+# Deployment strategy
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+
+# Environment-specific values
+# Override these in separate values files (values-dev.yaml, values-prod.yaml)
+environment: production

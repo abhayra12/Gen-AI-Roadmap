@@ -1,0 +1,184 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manufacturing-copilot
+  namespace: manufacturing-copilot
+  labels:
+    app: manufacturing-copilot
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: manufacturing-copilot
+      version: v1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: manufacturing-copilot
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: manufacturing-copilot-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: manufacturing-copilot
+        image: abhayra12/manufacturing-copilot:latest  # Update with your image
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        env:
+        # Configuration from ConfigMap
+        - name: APP_TITLE
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: APP_TITLE
+        - name: APP_VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: APP_VERSION
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: LOG_LEVEL
+        - name: ENABLE_TELEMETRY
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: ENABLE_TELEMETRY
+        - name: VLM_MODEL_ID
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: VLM_MODEL_ID
+        - name: LLM_MODEL_ID
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: LLM_MODEL_ID
+        - name: EMBEDDING_MODEL_ID
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: EMBEDDING_MODEL_ID
+        - name: MAX_RETRIES
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: MAX_RETRIES
+        - name: REQUEST_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: REQUEST_TIMEOUT
+        - name: TEMPERATURE
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: TEMPERATURE
+        - name: MAX_TOKENS
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: MAX_TOKENS
+        - name: CHROMA_PERSIST_DIR
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: CHROMA_PERSIST_DIR
+        - name: VALID_AUTH_TOKEN_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: manufacturing-copilot-config
+              key: VALID_AUTH_TOKEN_PREFIX
+        # Secrets
+        - name: HUGGINGFACE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: manufacturing-copilot-secret
+              key: HUGGINGFACE_TOKEN
+        # Optional database URL
+        # - name: DATABASE_URL
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: manufacturing-copilot-secret
+        #       key: DATABASE_URL
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        volumeMounts:
+        - name: chroma-data
+          mountPath: /data/chroma_db
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: chroma-data
+        persistentVolumeClaim:
+          claimName: chroma-data-pvc
+      - name: tmp
+        emptyDir: {}
+      # Pod anti-affinity for high availability
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - manufacturing-copilot
+              topologyKey: kubernetes.io/hostname

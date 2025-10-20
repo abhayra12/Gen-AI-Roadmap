@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: manufacturing-copilot
+  namespace: manufacturing-copilot
+  labels:
+    app: manufacturing-copilot
+  annotations:
+    # NGINX Ingress Controller annotations
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    
+    # GKE Ingress annotations (alternative to NGINX)
+    # kubernetes.io/ingress.class: "gce"
+    # kubernetes.io/ingress.global-static-ip-name: "copilot-ip"
+    
+    # AWS ALB annotations (alternative)
+    # kubernetes.io/ingress.class: "alb"
+    # alb.ingress.kubernetes.io/scheme: internet-facing
+    # alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: nginx  # Change to "gce" for GKE, "alb" for AWS
+  tls:
+  - hosts:
+    - copilot.example.com  # Update with your domain
+    secretName: copilot-tls
+  rules:
+  - host: copilot.example.com  # Update with your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: manufacturing-copilot
+            port:
+              number: 8080

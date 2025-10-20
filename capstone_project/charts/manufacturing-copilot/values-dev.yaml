@@ -1,0 +1,40 @@
+# Development environment values
+# Usage: helm install copilot ./charts/manufacturing-copilot -f charts/manufacturing-copilot/values-dev.yaml
+
+environment: development
+
+# Lower resources for dev
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+
+# Disable autoscaling in dev
+autoscaling:
+  enabled: false
+
+# Disable ingress in dev (use port-forward)
+ingress:
+  enabled: false
+
+# Smaller persistence
+persistence:
+  size: 5Gi
+
+# More verbose logging
+config:
+  logLevel: "DEBUG"
+  enableTelemetry: "false"
+
+# Disable network policy for easier debugging
+networkPolicy:
+  enabled: false
+
+# Disable monitoring in dev
+monitoring:
+  enabled: false

@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: manufacturing-copilot
+  namespace: manufacturing-copilot
+  labels:
+    app: manufacturing-copilot
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: manufacturing-copilot

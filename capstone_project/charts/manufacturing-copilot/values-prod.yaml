@@ -1,0 +1,95 @@
+# Production environment values
+# Usage: helm install copilot ./charts/manufacturing-copilot -f charts/manufacturing-copilot/values-prod.yaml
+
+environment: production
+
+# Production-ready replicas
+replicaCount: 3
+
+# Production image (update with your registry)
+image:
+  repository: gcr.io/your-project/manufacturing-copilot
+  tag: "v1.0.0"
+
+# Enable all production features
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 75
+
+# Production ingress with TLS
+ingress:
+  enabled: true
+  className: "gce"  # or "nginx", "alb", etc.
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: "copilot-prod-ip"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rate-limit: "50"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: copilot.yourdomain.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: copilot-prod-tls
+      hosts:
+        - copilot.yourdomain.com
+
+# Production resources
+resources:
+  requests:
+    cpu: "1"
+    memory: "2Gi"
+  limits:
+    cpu: "2"
+    memory: "4Gi"
+
+# Production persistence
+persistence:
+  enabled: true
+  storageClass: "pd-ssd"  # GKE SSD, use "gp3" for EKS, "managed-premium" for AKS
+  size: 50Gi
+
+# Production logging
+config:
+  logLevel: "INFO"
+  enableTelemetry: "true"
+
+# Enable network policy
+networkPolicy:
+  enabled: true
+
+# Enable monitoring
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+# Pod anti-affinity for high availability
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - manufacturing-copilot
+          topologyKey: kubernetes.io/hostname
+
+# Node selector for production node pool
+nodeSelector:
+  workload-type: api
+  tier: production
+
+# Service account with Workload Identity (GKE example)
+serviceAccount:
+  create: true
+  annotations:
+    iam.gke.io/gcp-service-account: copilot-sa@your-project.iam.gserviceaccount.com

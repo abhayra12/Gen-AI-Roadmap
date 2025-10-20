@@ -12,6 +12,7 @@
 - [Customization Guide](#-customization-guide)
 - [Performance Optimization](#-performance-optimization)
 - [Error Handling Strategy](#-error-handling-strategy)
+- [Production Deployment Architecture](#-production-deployment-architecture) ⭐ **NEW**
 
 ---
 
@@ -1001,6 +1002,148 @@ logger.info(
 
 ---
 
+## 🚢 Production Deployment Architecture
+
+### Kubernetes Architecture
+
+**Recommended for production deployments** with high availability and scalability requirements.
+
+```
+┌───────────────────────────────────────────────────────┐
+│              Kubernetes Cluster (GKE/EKS/AKS)         │
+│                                                       │
+│  ┌─────────────────────────────────────────────┐    │
+│  │            Ingress Controller                │    │
+│  │  (NGINX / GKE Ingress / AWS ALB)            │    │
+│  │  • TLS Termination                          │    │
+│  │  • Rate Limiting                            │    │
+│  │  • Path-based Routing                       │    │
+│  └──────────────────┬──────────────────────────┘    │
+│                     │                                │
+│  ┌──────────────────▼──────────────────────────┐    │
+│  │          Service (ClusterIP)                │    │
+│  │  manufacturing-copilot:8080                 │    │
+│  └──────────────────┬──────────────────────────┘    │
+│                     │                                │
+│  ┌──────────────────▼──────────────────────────┐    │
+│  │      Horizontal Pod Autoscaler (HPA)        │    │
+│  │  • Min: 2 replicas                          │    │
+│  │  • Max: 10 replicas                         │    │
+│  │  • Target: 70% CPU / 80% Memory             │    │
+│  └──────────────────┬──────────────────────────┘    │
+│                     │                                │
+│  ┌──────────────────▼──────────────────────────┐    │
+│  │        Deployment: manufacturing-copilot     │    │
+│  │  ┌─────────────┐  ┌─────────────┐          │    │
+│  │  │   Pod 1     │  │   Pod 2     │  ...     │    │
+│  │  │ ┌─────────┐ │  │ ┌─────────┐ │          │    │
+│  │  │ │FastAPI  │ │  │ │FastAPI  │ │          │    │
+│  │  │ │Container│ │  │ │Container│ │          │    │
+│  │  │ └─────────┘ │  │ └─────────┘ │          │    │
+│  │  │ • CPU: 500m-2│  │ • CPU: 500m-2│         │    │
+│  │  │ • Mem: 1-4Gi│  │ • Mem: 1-4Gi│          │    │
+│  │  │ • Liveness  │  │ • Readiness │          │    │
+│  │  │ • Startup   │  │   Probes    │          │    │
+│  │  └─────────────┘  └─────────────┘          │    │
+│  └─────────────────────────────────────────────┘    │
+│                     │                                │
+│  ┌──────────────────▼──────────────────────────┐    │
+│  │   Persistent Volume (ChromaDB Storage)      │    │
+│  │   • Size: 10Gi (SSD)                        │    │
+│  │   • RWO (ReadWriteOnce)                     │    │
+│  │   • StorageClass: pd-ssd/gp3/managed-premium│    │
+│  └─────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─────────────────────────────────────────────┐    │
+│  │         ConfigMap & Secrets                 │    │
+│  │  • HUGGINGFACE_TOKEN (Secret)               │    │
+│  │  • Model IDs (ConfigMap)                    │    │
+│  │  • API Settings (ConfigMap)                 │    │
+│  └─────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─────────────────────────────────────────────┐    │
+│  │      Monitoring & Observability             │    │
+│  │  • Prometheus (ServiceMonitor)              │    │
+│  │  • Grafana Dashboards                       │    │
+│  │  • Structured Logging (Fluentd)             │    │
+│  └─────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─────────────────────────────────────────────┐    │
+│  │         Network Policies                    │    │
+│  │  • Ingress: From ingress-nginx only         │    │
+│  │  • Egress: DNS + HTTPS (HuggingFace API)    │    │
+│  └─────────────────────────────────────────────┘    │
+│                                                       │
+│  ┌─────────────────────────────────────────────┐    │
+│  │      Pod Disruption Budget (PDB)            │    │
+│  │  • minAvailable: 1                          │    │
+│  │  • Ensures availability during updates      │    │
+│  └─────────────────────────────────────────────┘    │
+└───────────────────────────────────────────────────────┘
+```
+
+### Key Production Features
+
+**1. High Availability**
+- **Pod Disruption Budget**: Ensures at least 1 pod always running during voluntary disruptions
+- **Anti-Affinity**: Spreads pods across nodes/zones
+- **Health Probes**: Liveness, readiness, and startup probes prevent cascading failures
+
+**2. Auto-Scaling**
+- **Horizontal Pod Autoscaler**: Scales 2-10 replicas based on CPU/memory
+- **Advanced Scaling Policies**: 
+  - Scale up: Max 4 pods per minute, 100% increase
+  - Scale down: 5 min stabilization window
+- **Custom Metrics**: Can add HuggingFace API latency metrics
+
+**3. Security**
+- **NetworkPolicy**: Restricts pod-to-pod and external communication
+- **SecurityContext**: Non-root user, read-only filesystem, dropped capabilities
+- **Secrets Management**: Kubernetes Secrets with optional External Secrets Operator
+- **RBAC**: Least-privilege ServiceAccount
+
+**4. Observability**
+- **Prometheus Integration**: ServiceMonitor for metrics scraping
+- **Structured Logging**: JSON logs with request tracing
+- **Request Tracing**: X-Request-Trace-ID header for distributed tracing
+
+**5. Storage**
+- **Persistent Volume**: SSD-backed storage for ChromaDB vector database
+- **StatefulSet Option**: For multi-replica ChromaDB (future enhancement)
+
+### Deployment Paths
+
+**Path 1: Helm (Recommended)**
+```bash
+helm install copilot ./charts/manufacturing-copilot \
+  --namespace manufacturing-copilot \
+  --create-namespace \
+  --values ./charts/manufacturing-copilot/values-prod.yaml \
+  --set secrets.huggingfaceToken="hf_your_token"
+```
+
+**Path 2: kubectl**
+```bash
+kubectl apply -f kubernetes/ --namespace=manufacturing-copilot
+```
+
+**Path 3: GitOps (ArgoCD/Flux)**
+- Helm chart or plain manifests tracked in Git
+- Automatic sync on commit
+- Rollback capability
+
+### Multi-Cloud Support
+
+| Cloud | Ingress Controller | Storage Class | Workload Identity |
+|-------|-------------------|---------------|-------------------|
+| **GKE** | gce | pd-ssd | iam.gke.io/gcp-service-account |
+| **EKS** | alb | gp3 | eks.amazonaws.com/role-arn |
+| **AKS** | nginx | managed-premium | azure.workload.identity/client-id |
+
+**See [KUBERNETES_DEPLOYMENT.md](KUBERNETES_DEPLOYMENT.md) for complete guide.**
+
+---
+
 ## 🎓 Further Customization Ideas
 
 1. **Add Multi-Language Support**: Use `googletrans` for SOPs
@@ -1011,9 +1154,11 @@ logger.info(
 6. **Multi-Modal**: Combine audio (equipment sounds) + vision
 7. **Predictive Maintenance**: Add time-series forecasting agent
 8. **Knowledge Graph**: Use Neo4j for equipment relationships
+9. **Kubernetes CronJobs**: Scheduled maintenance tasks (DB backups, model updates)
+10. **Service Mesh**: Istio/Linkerd for advanced traffic management
 
 ---
 
-**Questions? See [README.md](README.md) or open an issue!**
+**Questions? See [README.md](README.md), [KUBERNETES_DEPLOYMENT.md](KUBERNETES_DEPLOYMENT.md), or open an issue!**
 
 **Built with ❤️ for the Gen AI Masters Program**
