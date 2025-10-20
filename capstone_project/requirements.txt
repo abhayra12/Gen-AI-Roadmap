@@ -7,12 +7,15 @@ uvicorn[standard]==0.24.0
 pydantic==2.5.0
 pydantic-settings==2.1.0
 
-# AI/ML Libraries
-torch==2.1.0
+# AI/ML Libraries - HuggingFace Ecosystem
 transformers==4.35.2
 sentence-transformers==2.2.2
+huggingface-hub==0.19.4
+
+# LangChain with HuggingFace Integration
 langchain==0.1.0
 langchain-community==0.0.10
+langchain-huggingface==0.0.1
 langgraph==0.0.20
 
 # Vector Database
@@ -30,6 +33,9 @@ requests==2.31.0
 
 # Monitoring & Logging
 prometheus-fastapi-instrumentator==6.1.0
+
+# Note: torch removed - using HuggingFace Inference API instead of local models
+# This allows running on CPU-only machines without heavy GPU requirements
 
 # Development & Testing (optional - install with -r requirements-dev.txt)
 # pytest==7.4.3

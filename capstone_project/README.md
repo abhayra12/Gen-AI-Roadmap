@@ -2,13 +2,15 @@
 
 A production-grade, multi-agent AI system for smart manufacturing that leverages Vision-Language Models, RAG, and LangGraph to solve real-world factory challenges.
 
+> **⚡ Cloud-Native Design**: Uses **HuggingFace Inference Endpoints** - no local GPU required! Run on any machine with just CPU and internet connection.
+
 ## 🎯 Project Overview
 
 The Manufacturing Copilot is an intelligent system that combines three specialized AI agents:
 
-- **Vision Agent**: Analyzes product images to identify manufacturing defects
-- **RAG Agent**: Provides expert maintenance guidance from technical documentation
-- **Report Agent**: Generates structured, multi-lingual production reports
+- **Vision Agent**: Analyzes product images to identify manufacturing defects using BLIP-2 VLM
+- **RAG Agent**: Provides expert maintenance guidance from technical documentation using Llama-2
+- **Report Agent**: Generates structured, professional production reports using LLM
 
 These agents are orchestrated by a central LangGraph-based system and exposed via a secure FastAPI backend.
 
@@ -27,18 +29,32 @@ These agents are orchestrated by a central LangGraph-based system and exposed vi
 ┌────┐ ┌───┐  ┌──────┐
 │VLM │ │RAG│  │Report│
 └────┘ └───┘  └──────┘
+   │      │        │
+   └──────┼────────┘
+          │
+    ┌─────▼─────┐
+    │ HuggingFace│
+    │  Inference │
+    │    API     │
+    └───────────┘
 ```
+
+**Key Design Decision**: All LLM/VLM inference is done via **HuggingFace Inference API**, making this project:
+- ✅ **Lightweight**: No need for expensive GPUs locally
+- ✅ **Scalable**: HuggingFace handles model serving and scaling
+- ✅ **Production-Ready**: Reliable, managed inference endpoints
+- ✅ **Cost-Effective**: Pay-per-use pricing, free tier available
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.11+
-- Docker & Docker Compose
-- PostgreSQL 15+
-- ChromaDB (for vector storage)
+- **Python 3.11+**
+- **HuggingFace Account** with API token ([get it here](https://huggingface.co/settings/tokens))
+- **Docker & Docker Compose** (optional, for full stack deployment)
+- **PostgreSQL 15+** (optional, for production logging)
 
-### Local Development Setup
+### Local Development Setup (5 Minutes)
 
 1. **Clone the repository**:
    ```bash
@@ -54,24 +70,38 @@ These agents are orchestrated by a central LangGraph-based system and exposed vi
 
 3. **Install dependencies**:
    ```bash
-   pip install -r requirements-dev.txt
+   pip install -r requirements.txt
    ```
 
 4. **Set up environment variables**:
    ```bash
    cp .env.example .env
-   # Edit .env with your configuration
+   # Edit .env and add your HuggingFace token:
+   # HUGGINGFACE_TOKEN=hf_your_token_here
    ```
 
-5. **Run with Docker Compose**:
+5. **Run the API server**:
    ```bash
-   docker-compose up --build
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
    ```
 
 6. **Access the API**:
    - API: http://localhost:8080
-   - API Docs: http://localhost:8080/docs
+   - **Interactive API Docs**: http://localhost:8080/docs 👈 Try it here!
    - Health Check: http://localhost:8080/health
+
+### Using Docker Compose (Full Stack)
+
+For production-like environment with database:
+
+```bash
+docker-compose up --build
+```
+
+This starts:
+- FastAPI backend on port 8080
+- PostgreSQL database
+- ChromaDB vector store
 
 ## 📝 API Endpoints
 
@@ -93,6 +123,26 @@ Body:
   "equipment_id": "CNC-A-102",
   "problem_description": "Machine overheating during operation",
   "image_id": "img_12345"
+}
+```
+
+**Response**:
+```json
+{
+  "request_id": "uuid",
+  "vision_analysis": {
+    "defects_found": ["micro-fracture", "surface-roughness"],
+    "confidence": 0.87
+  },
+  "rag_guidance": {
+    "recommended_steps": [
+      "1. Check coolant levels...",
+      "2. Inspect coolant lines..."
+    ],
+    "cited_documents": ["SOP-123", "MAINT-GUIDE-V2"]
+  },
+  "generated_report": "MANUFACTURING INCIDENT REPORT...",
+  "confidence_score": 0.86
 }
 ```
 
