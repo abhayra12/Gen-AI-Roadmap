@@ -25,16 +25,22 @@ By the end of this module, you will have hands-on experience with:
 
 The eight notebooks in this module serve as **conceptual guides** for the tasks you will perform to build and deploy the final capstone project. All the code you write will be part of the final project located in the top-level `capstone_project/` directory.
 
-| Notebook                            | Concept Covered                     | Corresponding Capstone Component |
-|-------------------------------------|-------------------------------------|----------------------------------|
-| `01_mlops_fundamentals.ipynb`       | MLOps Principles                    | Entire `capstone_project`        |
-| `02_fastapi_ml_serving.ipynb`       | API Development                     | `capstone_project/app/`          |
-| `03_docker_containerization.ipynb`  | Containerization                    | `capstone_project/Dockerfile`    |
-| `04_monitoring_logging.ipynb`       | Observability                       | `capstone_project/app/monitoring`|
-| `05_cicd_github_actions.ipynb`      | CI/CD Automation                    | `capstone_project/.github/`      |
-| `06_gcp_deployment.ipynb`           | Cloud Deployment                    | `capstone_project/scripts/`      |
-| `07_terraform_iac.ipynb`            | Infrastructure as Code              | `capstone_project/terraform/`    |
-| `08_kubernetes_orchestration.ipynb` | Orchestration (Advanced)            | `capstone_project/charts/`       |
+| Notebook                            | Concept Covered                     | Corresponding Capstone Component | Status |
+|-------------------------------------|-------------------------------------|----------------------------------|--------|
+| `01_mlops_fundamentals.ipynb`       | MLOps Principles                    | Entire `capstone_project`        | ✅     |
+| `02_fastapi_ml_serving.ipynb`       | API Development                     | `capstone_project/app/`          | ✅     |
+| `03_docker_containerization.ipynb`  | Containerization                    | `capstone_project/Dockerfile`    | ✅     |
+| `04_monitoring_logging.ipynb`       | Observability                       | `capstone_project/app/monitoring`| ✅     |
+| `05_cicd_github_actions.ipynb`      | CI/CD Automation                    | `capstone_project/.github/`      | ✅     |
+| `06_gcp_deployment.ipynb`           | Cloud Deployment                    | `capstone_project/scripts/`      | ✅     |
+| `07_terraform_iac.ipynb`            | Infrastructure as Code              | `capstone_project/terraform/`    | ✅     |
+| `08_kubernetes_orchestration.ipynb` | Orchestration (Advanced) ⭐         | `capstone_project/charts/` + `kubernetes/` | ✅ **Production-Ready** |
+
+> ⭐ **NEW**: The capstone project now includes **complete production-ready Kubernetes deployment**!
+> - 📦 Helm charts in `capstone_project/charts/manufacturing-copilot/`
+> - 📋 Plain manifests in `capstone_project/kubernetes/`
+> - 🚀 Deployment scripts: `deploy-k8s.sh` and `deploy-k8s.ps1`
+> - 📖 Full guide: `capstone_project/KUBERNETES_DEPLOYMENT.md`
 
 ---
 
