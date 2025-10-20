@@ -8,12 +8,12 @@ class DiagnosisRequest(BaseModel):
     """Request model for the main diagnosis endpoint."""
     plant_id: str = Field(
         ...,
-        regex=r"^[A-Z]{3,4}-\w{2,3}$",
+        pattern=r"^[A-Z]{3,4}-\w{2,3}$",
         description="Unique plant identifier, e.g., 'PUNE-IN' or 'MEX-GTO'.",
-        example="PUNE-IN",
+        examples=["PUNE-IN"],
     )
     equipment_id: str = Field(
-        ..., min_length=4, description="Tag or ID of the equipment.", example="CNC-A-102"
+        ..., min_length=4, description="Tag or ID of the equipment.", examples=["CNC-A-102"]
     )
     problem_description: str = Field(
         ..., description="Technician's description of the issue."
