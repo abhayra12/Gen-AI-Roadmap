@@ -1,54 +1,54 @@
-# 📖 Week 3-4: Deep Learning & NLP Foundations
+# 📖 Week 3-4: Deep Learning & Natural Language Processing (NLP) Foundations
 
-**Phase 2: Deep Learning & NLP**  
-**Goal:** Dive into neural networks and master the Transformer architecture that powers modern LLMs.
+**Phase 2: From Classical Machine Learning to Deep Learning**  
+**Goal:** This module marks a pivotal transition from the foundational concepts of classical machine learning to the core of modern AI: **deep learning**. Our primary objective is to build a strong theoretical and practical understanding of neural networks, culminating in a deep dive into the **Transformer architecture**—the engine that powers today's Large Language Models (LLMs).
 
 ---
 
 ## 📚 Module Overview
 
-This module transitions from classical ML to the core of modern AI. You will learn the theory behind deep learning and gain hands-on experience with the fundamental architectures for computer vision (CNNs), sequence modeling (RNNs), and, most importantly, the Transformer.
+In this module, you will move beyond the structured, tabular data of the previous weeks and into the realm of unstructured data like text and images. You will learn the theory behind what makes deep learning so powerful and gain hands-on experience with the fundamental architectures that have revolutionized fields like computer vision (CNNs), sequence modeling (RNNs), and, most importantly, natural language processing (Transformers).
 
-### Learning Objectives
-By the end of this module, you will be able to:
-- ✅ Build and train neural networks using PyTorch.
-- ✅ Implement CNNs for image-based tasks like visual quality inspection.
-- ✅ Understand the architecture of RNNs for sequence data.
-- ✅ Master the Transformer architecture, including the self-attention mechanism.
-- ✅ Build a Transformer from scratch to solidify your understanding.
-- ✅ Leverage the HuggingFace ecosystem to use powerful pre-trained models.
-
----
-
-## 📓 Notebooks & Concepts
-
-This module covers the essential deep learning architectures in seven notebooks:
-
-| Order | Notebook                            | Key Concepts                                       |
-|-------|-------------------------------------|----------------------------------------------------|
-| 1.    | `01_neural_networks.ipynb`          | Backpropagation, PyTorch, Loss Functions           |
-| 2.    | `02_cnns_basics.ipynb`              | Convolutions, Pooling, Transfer Learning           |
-| 3.    | `03_rnns_sequences.ipynb`           | LSTMs, GRUs, Sequence-to-Sequence Models           |
-| 4.    | `04_transformer_architecture.ipynb` | Encoder-Decoder, Positional Encoding               |
-| 5.    | `05_attention_mechanism.ipynb`      | Self-Attention (Query, Key, Value), Multi-Head     |
-| 6.    | `06_embeddings_tokenization.ipynb`  | Word2Vec, BPE/WordPiece Tokenization               |
-| 7.    | `07_huggingface_intro.ipynb`        | `pipeline`, `AutoModel`, `AutoTokenizer`, Hub      |
+### Core Learning Objectives
+By the end of this two-week module, you will be able to:
+- ✅ **Build and Train Neural Networks**: Understand the mechanics of a neural network, including layers, activation functions, loss functions, and the backpropagation algorithm. You will implement and train your first neural networks using **PyTorch**.
+- ✅ **Implement Convolutional Neural Networks (CNNs)**: Grasp the concepts of convolutions and pooling layers and understand why CNNs are so effective for image-based tasks.
+- ✅ **Understand Recurrent Neural Networks (RNNs)**: Learn the architecture of RNNs and their variants (LSTMs, GRUs), which were the state-of-the-art for handling sequence data before the Transformer era.
+- ✅ **Master the Transformer Architecture**: Deconstruct the revolutionary Transformer model, paying close attention to its core innovation: the **self-attention mechanism**. You will build a Transformer from scratch to solidify your understanding.
+- ✅ **Grasp Embeddings and Tokenization**: Understand how we represent words and sentences as numbers that a neural network can process, covering techniques from Word2Vec to modern subword tokenization like BPE.
+- ✅ **Leverage the Hugging Face Ecosystem**: Get hands-on with the `transformers` library, learning how to use `pipeline`, `AutoModel`, and `AutoTokenizer` to download, use, and experiment with thousands of powerful pre-trained models from the Hugging Face Hub.
 
 ---
 
-## 📝 Homework: Text Classifier with Transformers
+## 📓 Notebooks & Key Concepts
 
-**Objective:** Build, fine-tune, and evaluate a Transformer-based text classifier.
+This module is structured into seven comprehensive notebooks that build upon each other:
+
+| Order | Notebook                            | Key Concepts Covered                                       |
+|-------|-------------------------------------|------------------------------------------------------------|
+| 1.    | `01_neural_networks.ipynb`          | **PyTorch Tensors, Automatic Differentiation, Backpropagation, Loss Functions, Optimizers.** |
+| 2.    | `02_cnn_basics.ipynb`               | **Convolutions, Pooling Layers, Filters, Image Classification, Transfer Learning.** |
+| 3.    | `03_rnn_lstm.ipynb`                 | **Handling Sequences, Hidden States, LSTMs, GRUs, Sequence-to-Sequence Models.** |
+| 4.    | `04_transformers.ipynb`             | **The Encoder-Decoder Structure, Positional Encodings, Scaled Dot-Product Attention.** |
+| 5.    | `05_attention_mechanisms.ipynb`     | **Self-Attention (Query, Key, Value), Multi-Head Attention, Masking.** |
+| 6.    | `06_embeddings.ipynb`               | **Word2Vec, GloVe, and the need for Contextual Embeddings.** |
+| 7.    | `07_huggingface_intro.ipynb`        | **Using `pipeline`, `AutoModel`, `AutoTokenizer`, and interacting with the Hugging Face Hub.** |
+
+---
+
+## 📝 Homework: Building a Text Classifier with Transformers
+
+**Objective:** Apply your knowledge of the Transformer architecture and the Hugging Face library to build, fine-tune, and evaluate a high-performance text classifier.
 
 **Task:**
-Using the HuggingFace ecosystem, you will select a pre-trained Transformer model, fine-tune it on a custom dataset for a classification task (e.g., sentiment analysis of product reviews), and evaluate its performance.
+You will select a pre-trained Transformer model (like `distilbert-base-uncased`), fine-tune it on a custom dataset for a practical classification task (e.g., sentiment analysis of customer reviews or classifying news articles by topic), and rigorously evaluate its performance. This project will be your first taste of applying state-of-the-art NLP models to a real-world problem.
 
-- **Instructions:** See the `HOMEWORK.md` file in this directory for detailed instructions.
+- **Detailed Instructions:** Please refer to the `HOMEWORK.md` file located in this directory for the full assignment details.
 
 ---
 
 ## 🎯 What's Next?
 
-With a strong understanding of Transformers, you are ready for **Week 5-6: LLMs & Retrieval-Augmented Generation (RAG)**. You will learn how to effectively prompt Large Language Models and build systems that can reason over external knowledge.
+With a strong, foundational understanding of the Transformer architecture, you will be perfectly positioned for the next module, **Week 5-6: LLMs & Retrieval-Augmented Generation (RAG)**. In that module, you will move from training models to *using* very large, pre-trained models and building sophisticated systems that can reason over external knowledge bases.
 
-**Get ready to dive deep!** 🧠
+**This module is where you truly start building at the cutting edge of AI. Let's dive in!** 🧠
