@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql://copilot:copilot_pwd@db:5432/manufacturing_db
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - chromadb
+    networks:
+      - copilot-network
+    volumes:
+      - ./app:/app
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=manufacturing_db
+      - POSTGRES_USER=copilot
+      - POSTGRES_PASSWORD=copilot_pwd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - copilot-network
+    restart: unless-stopped
+
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    networks:
+      - copilot-network
+    restart: unless-stopped
+
+networks:
+  copilot-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  chroma_data:
