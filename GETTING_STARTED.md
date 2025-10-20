@@ -1,89 +1,270 @@
-# 🚀 Getting Started: Your Development Environment
+# 🚀 Getting Started - 2 Minute Setup
 
-Welcome! This guide provides a clear, step-by-step path to setting up your development environment. To ensure a smooth and consistent experience, we **strongly recommend using GitHub Codespaces**. It's the fastest way to get started and avoids common local setup issues.
-
----
-
-## 🛠️ Environment Setup: The Recommended Path (GitHub Codespaces)
-
-GitHub Codespaces creates a pre-configured, containerized development environment in the cloud. This means you can start coding in minutes with all the necessary tools and dependencies already installed, directly from your browser.
-
-### Steps to Launch Your Codespace:
-1.  **Navigate to the Repository:** Go to the main page of this repository on GitHub.
-2.  **Open in Codespaces:**
-    *   Click the green **`< > Code`** button located at the top of the file list.
-    *   Select the **`Codespaces`** tab.
-    *   Click **`Create codespace on main`**. GitHub will prepare your environment, which may take a few minutes.
-3.  **Set Your Hugging Face Token:**
-    *   To download models from Hugging Face, you need to provide an access token.
-    *   Once your Codespace is running, go to your repository's **`Settings`** tab.
-    *   Navigate to **`Secrets and variables`** > **`Codespaces`** on the left-hand menu.
-    *   Create a new repository secret named `HUGGINGFACE_TOKEN`.
-    *   Paste your [Hugging Face access token](https://huggingface.co/settings/tokens) into the value field. It's recommended to use a token with 'read' permissions.
-    *   The environment is designed to automatically detect and use this secret, so you only need to do this once.
-4.  **Start Learning:**
-    *   Once the Codespace is ready, it will open a VS Code interface in your browser.
-    *   Open the `00_environment_setup.ipynb` notebook from the file explorer on the left.
-    *   Run the cells in the notebook to verify that all dependencies are correctly installed and that you can successfully connect to Hugging Face.
-
-That's it! You are now fully set up and ready to begin the course.
+Choose your path: **Codespaces (recommended)** or **Local**
 
 ---
 
-## 💻 Local Development Setup (Alternative Path)
+## ⚡ Option 1: GitHub Codespaces (Easiest)
 
-If you are an advanced user and prefer to work on your local machine, follow these steps. Please note that this path may require more troubleshooting.
+**Time**: 2-3 minutes  
+**Difficulty**: ⭐ Beginner-friendly  
+**Cost**: Free (60 hours/month on free tier)
 
-### 1. Prerequisites:
-- **Python:** Ensure you have Python 3.11 or higher installed.
-- **Git:** You must have Git installed for cloning the repository.
-- **IDE:** A modern code editor like VS Code is highly recommended.
+### Steps:
+1. **Click "Code" button** (top right, green button)
+2. **Select "Codespaces" tab**
+3. **Click "Create codespace on main"**
+4. **Wait 2-3 minutes** for environment to build
+5. **Open `00_environment_setup.ipynb`**
+6. **Run all cells** to verify setup
 
-### 2. Setup Instructions:
-1.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/your-username/your-repo-name.git
-    cd your-repo-name
-    ```
-2.  **Create and Activate a Virtual Environment:**
-    *   This is a critical step to isolate project dependencies.
-    *   **Windows (PowerShell):**
-        ```powershell
-        python -m venv venv
-        .\venv\Scripts\Activate.ps1
-        ```
-    *   **macOS / Linux (Bash):**
-        ```bash
-        python3 -m venv venv
-        source venv/bin/activate
-        ```
-3.  **Install Dependencies:**
-    *   First, upgrade `pip` to the latest version.
-    *   Then, install all required packages from the `requirements.txt` file.
-    ```bash
-    pip install --upgrade pip
-    pip install -r requirements.txt
-    ```
-4.  **Set Environment Variables:**
-    *   Create a file named `.env` in the root directory of the project.
-    *   Add your Hugging Face token to this file. This keeps your secret keys out of your code.
-        ```
-        HUGGINGFACE_TOKEN="hf_your_hugging_face_token_here"
-        ```
-    *   The notebooks are configured to automatically load variables from this `.env` file. **Crucially, ensure your `.gitignore` file includes `.env` to prevent accidentally committing your secrets.**
+✅ Done! Everything is pre-configured.
+
+### Add Your API Keys (Optional)
+For notebooks using HuggingFace or OpenAI:
+
+1. Go to **Repository Settings** → **Secrets** → **Codespaces**
+2. Add secrets:
+   - `HUGGINGFACE_TOKEN` ([get it here](https://huggingface.co/settings/tokens))
+   - `OPENAI_API_KEY` (if using OpenAI models)
+3. Restart Codespace
 
 ---
 
-## ✅ Verification: The Final Check
+## 💻 Option 2: Local Setup
 
-Whether you are on Codespaces or your local machine, the final step is to **verify your setup**.
-- Open and run all the cells in the `00_environment_setup.ipynb` notebook.
-- If every cell executes without any errors, your environment is correctly configured and ready for the course.
+**Time**: 10-15 minutes  
+**Difficulty**: ⭐⭐ Requires some technical knowledge  
+**Cost**: Free
 
-## 🗂️ Next Steps
+### Prerequisites
+- Python 3.11+ ([download](https://www.python.org/downloads/))
+- Git ([download](https://git-scm.com/downloads))
+- VS Code ([download](https://code.visualstudio.com/)) - recommended
 
-With your environment fully operational, you are ready to dive in:
-1.  Start by reading the `README.md` in the `week-01-02-python-ml-foundations` directory to get an overview of the first module.
-2.  Begin your hands-on learning with the first notebook of the course.
+### Steps:
 
-Happy coding, and welcome to the Gen AI Masters Program!
+#### 1. Clone Repository
+```bash
+git clone https://github.com/abhayra12/Gen-AI-Roadmap.git
+cd Gen-AI-Roadmap
+```
+
+#### 2. Create Virtual Environment
+**Windows (PowerShell)**:
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+**macOS / Linux**:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+#### 3. Install Dependencies
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+#### 4. Set Environment Variables
+Create `.env` file in project root:
+```bash
+# .env file
+HUGGINGFACE_TOKEN=hf_your_token_here
+OPENAI_API_KEY=sk-your_key_here  # Optional
+```
+
+**Important**: Never commit `.env` to Git (already in `.gitignore`)
+
+#### 5. Verify Setup
+```bash
+jupyter lab
+# Open 00_environment_setup.ipynb
+# Run all cells
+```
+
+✅ If all cells run without errors, you're ready!
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**"Python not found"**
+```bash
+# Check Python version
+python --version  # Should be 3.11+
+
+# If not installed, download from python.org
+```
+
+**"pip install fails"**
+```bash
+# Upgrade pip first
+python -m pip install --upgrade pip
+
+# Try again
+pip install -r requirements.txt
+```
+
+**"Cannot activate venv" (Windows)**
+```powershell
+# Run PowerShell as Administrator
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Try activating again
+.\venv\Scripts\Activate.ps1
+```
+
+**"ImportError: No module named..."**
+```bash
+# Make sure venv is activated (you should see (venv) in prompt)
+# Reinstall dependencies
+pip install -r requirements.txt
+```
+
+**"CUDA/GPU not available"**
+- Don't worry! Course works fine on CPU
+- Most notebooks use small models
+- For larger models, use Google Colab (free GPU)
+
+### Still Stuck?
+
+1. Check [FAQ.md](./FAQ.md)
+2. Search existing [GitHub Issues](https://github.com/abhayra12/Gen-AI-Roadmap/issues)
+3. Open a new issue with:
+   - Your OS and Python version
+   - Error message (full traceback)
+   - Steps you've tried
+
+---
+
+## 📚 What's Next?
+
+### Beginner Track:
+1. ✅ **Week 0** (if new to Python): Review [BEGINNER_ASSESSMENT.md](./BEGINNER_ASSESSMENT.md)
+2. 📓 **Week 1**: `week-01-02-python-ml-foundations/01_environment_setup.ipynb`
+3. 🐍 **Week 1**: `02_python_essentials.ipynb`
+4. 📊 **Week 2**: `03_numpy_pandas.ipynb`
+
+### Experienced Track:
+1. 📓 Scan Week 1-2 (review if needed)
+2. 🧠 Start Week 3-4 (Deep Learning)
+3. 🚀 Focus on Week 5+ (LLMs, Agents)
+
+### Everyone:
+- 📖 Read module READMEs before starting each week
+- ✍️ Do the homework assignments
+- 🏗️ Start thinking about capstone project ideas
+
+---
+
+## 🎯 Recommended Setup
+
+### Essential Extensions (VS Code):
+- **Python** (Microsoft)
+- **Jupyter** (Microsoft)
+- **GitHub Copilot** (optional, helpful)
+
+### Helpful Tools:
+- **Terminal**: Integrated terminal in VS Code
+- **Git GUI**: GitHub Desktop (if you prefer GUI)
+- **Notes**: Keep a learning journal
+
+### Organization:
+```
+my-gen-ai-journey/
+├── Gen-AI-Roadmap/        # This repo
+├── my-projects/           # Your experiments
+│   ├── week1-practice/
+│   ├── week2-homework/
+│   └── ...
+└── notes/                 # Learning notes
+```
+
+---
+
+## ⏱️ Time Estimates
+
+| Activity | First Time | Subsequent |
+|----------|-----------|------------|
+| Codespace setup | 3 min | 30 sec |
+| Local setup | 15 min | - |
+| Per notebook | 30-90 min | - |
+| Homework | 2-4 hours | - |
+| Weekly total | 8-10 hours | - |
+
+**Tip**: Set aside 1-2 hour blocks for focused learning.
+
+---
+
+## 🔑 API Keys Guide
+
+### HuggingFace Token (Required)
+1. Go to https://huggingface.co/settings/tokens
+2. Click "New token"
+3. Name: "gen-ai-course"
+4. Type: "Read"
+5. Copy token
+
+### OpenAI API Key (Optional)
+- Only needed for Week 5-6 and 7-8 OpenAI examples
+- Alternative: Use open models (Llama, Mistral) - free
+- Get key: https://platform.openai.com/api-keys
+
+### Anthropic API Key (Optional)
+- For Claude examples in Week 7-8
+- Alternative: Use OpenAI or open models
+- Get key: https://console.anthropic.com/
+
+**Budget Tip**: Most notebooks work with free HuggingFace models!
+
+---
+
+## ✅ Setup Verification Checklist
+
+Run this to verify everything:
+
+```python
+# In 00_environment_setup.ipynb
+
+import sys
+import torch
+import transformers
+import langchain
+import pandas as pd
+import numpy as np
+
+print(f"✅ Python: {sys.version}")
+print(f"✅ PyTorch: {torch.__version__}")
+print(f"✅ Transformers: {transformers.__version__}")
+print(f"✅ LangChain: {langchain.__version__}")
+print(f"✅ Pandas: {pd.__version__}")
+print(f"✅ NumPy: {np.__version__}")
+```
+
+All packages should print versions without errors.
+
+---
+
+## 🎓 Ready to Learn!
+
+Everything set up? **Great!** 
+
+**Next Steps**:
+1. Open `week-01-02-python-ml-foundations/README.md`
+2. Start with `01_environment_setup.ipynb`
+3. Follow the notebooks in order
+4. Join the learning journey!
+
+**Need more details?** See [GETTING_STARTED_DETAILED.md](./GETTING_STARTED_DETAILED.md)
+
+---
+
+**Happy Learning!** 🚀
+
+_Having issues? Open a [GitHub Issue](https://github.com/abhayra12/Gen-AI-Roadmap/issues) and we'll help!_
