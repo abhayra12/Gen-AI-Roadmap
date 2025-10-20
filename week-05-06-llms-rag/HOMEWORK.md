@@ -1,4 +1,4 @@
-# 📝 Homework Assignment - Week 5-6
+# 📝 Homework Assignment - Week 5-6: Build the Copilot's Brain
 
 **Module:** LLMs, Prompt Engineering & RAG  
 **Project:** Build the Knowledge Core for the Manufacturing Copilot  
@@ -7,133 +7,132 @@
 
 ---
 
-## 🎯 Assignment: Build a Q&A System for a CNC Machine Technical Manual
+## 🎯 Your Mission: Forge the "Brain" of the Manufacturing Copilot
 
-Your mission is to build the "brain" of our Manufacturing Copilot. This will be a Retrieval-Augmented Generation (RAG) system that allows a factory floor technician to ask questions in natural language about a specific piece of equipment and get accurate answers sourced directly from its technical manuals.
+Your mission, should you choose to accept it, is to build the single most critical component of our Manufacturing Copilot: its **knowledge core**. This is not just another Q&A bot. You are creating a domain-specific expert system that can empower a factory floor technician to get instant, accurate answers from complex technical manuals.
 
-This is a critical component that turns our Copilot from a general assistant into a domain-specific expert.
-
----
-
-## 📊 Project Requirements
-
-### Dataset
-You will use a provided technical manual for a "Haas VF-2" CNC machine. This document contains complex information about operations, maintenance, and troubleshooting. You can also supplement this with any provided maintenance logs or Standard Operating Procedures (SOPs).
-
-### System Components
-1.  **Document Ingestion & Processing Pipeline:** A robust script to load, parse, and chunk the PDF manual.
-2.  **Vector Database:** A FAISS or ChromaDB vector store to house the knowledge.
-3.  **Retrieval System:** An efficient retriever that finds the most relevant document chunks for a given query.
-4.  **LLM Integration:** A generation component using a powerful LLM from HuggingFace to synthesize answers.
-5.  **Web Interface:** A simple but effective Gradio or Streamlit interface for live interaction.
+You will construct a complete, end-to-end Retrieval-Augmented Generation (RAG) pipeline. This system will ingest a dense technical manual for a CNC machine, understand its contents, and provide precise, source-cited answers to natural language questions. Success here means transforming a static, hard-to-search document into a dynamic, interactive knowledge source.
 
 ---
 
-## 📋 Task Breakdown
+## 📊 The Scenario: A Technician's Assistant
 
-### Part 1: Document Processing & Ingestion (25 points)
--   Load a sample PDF document (you can create a short, 2-3 page PDF with mock technical data).
--   Implement a smart chunking strategy. **Justify your choice of `chunk_size` and `chunk_overlap`**. Is `RecursiveCharacterTextSplitter` the best choice for technical manuals?
--   Extract relevant metadata for each chunk (e.g., page number, source document). This is crucial for citation.
--   Write a script to validate the quality of your chunks.
+Imagine a technician on the factory floor facing a machine malfunction. Instead of spending 30 minutes searching through a 500-page PDF manual, they can simply ask the Copilot:
 
-### Part 2: Vector Database and Embeddings (20 points)
--   **Select and justify your choice of embedding model**. Consider models like `BAAI/bge-small-en-v1.5` or `sentence-transformers/all-mpnet-base-v2`. Why is it suitable for technical text?
--   Set up and populate a ChromaDB or FAISS vector store.
--   Implement a function to perform similarity search and test its effectiveness on sample queries (e.g., "how to change the coolant?").
+> *"What's the recommended pressure for the hydraulic system during a cycle?"*
 
-### Part 3: The RAG Pipeline (30 points)
--   Build the end-to-end RAG chain using LangChain.
--   **Query Processing:** How will you handle user queries? Any pre-processing needed?
--   **Retrieval & Re-ranking (Optional but encouraged):** Retrieve the top-k most relevant chunks. Consider adding a re-ranking step to improve relevance.
--   **Context Assembly & Prompting:** Create a robust prompt template that combines the user's question with the retrieved context. Your prompt should guide the LLM to answer based *only* on the provided information.
--   **Generation:** Use a model like `google/flan-t5-base` or another suitable model for generation.
-
-### Part 4: Evaluation (15 points)
--   Create a test set of at least 10 question-answer pairs based on your mock manual.
--   Measure the retrieval accuracy (e.g., Hit Rate, MRR). Did your retriever find the correct source chunk?
--   Evaluate the quality of the generated responses. Are they accurate? Concise? Do they avoid making things up (hallucination)?
--   Document your findings in a short report.
-
-### Part 5: Interactive Demo (10 points)
--   Build a simple but functional Streamlit or Gradio interface.
--   The interface should allow a user to type a question.
--   The application should display the generated answer.
--   **Crucially, it must also cite the source**, showing the page number or the retrieved text chunk, so the user can verify the information.
+Your system will instantly retrieve the relevant section from the manual and provide a clear, concise answer, complete with the page number for verification. This is the power you are about to build.
 
 ---
 
-## 🎯 Grading Rubric
+## 📋 Core Requirements
+
+You will build your system around a provided technical manual for a "Haas VF-2" CNC machine. This document is representative of the complex, dense information common in industrial settings.
+
+Your final submission must include:
+
+1.  **Document Processing Pipeline:** A script that can load, parse, and intelligently chunk the provided PDF manual.
+2.  **Vector Database:** A persistent `ChromaDB` or `FAISS` vector store that serves as the long-term memory of your system.
+3.  **RAG Chain:** An end-to-end LangChain pipeline that connects a user query to the vector store and a generative LLM.
+4.  **Evaluation Suite:** A clear and repeatable method for evaluating the quality of both your retriever and your generator.
+5.  **Interactive Web Interface:** A simple but effective `Streamlit` or `Gradio` application that allows for live interaction and, most importantly, **cites its sources**.
+
+---
+
+## ✅ Task Breakdown & Step-by-Step Guide
+
+### Part 1: The Foundation - Document Ingestion & Processing (25 points)
+
+This is the most critical step. Garbage in, garbage out.
+
+-   **Load the Data:** Use a robust PDF loader (like `PyPDFLoader` from LangChain) to ingest the sample manual.
+-   **Chunking Strategy:** Don't just split randomly. Technical manuals have structure (headings, tables, lists).
+    -   **Implement `RecursiveCharacterTextSplitter`**. Start with a `chunk_size` of `1000` and a `chunk_overlap` of `200`.
+    -   **Justify your choices.** In your `README.md`, explain *why* you chose your chunking parameters. How do they balance context preservation with the LLM's token limit?
+-   **Metadata is King:** For each chunk, you *must* extract and store the page number (`metadata={'page': ...}`). This is non-negotiable for source citation.
+-   **Validation:** Write a small script to print out a few sample chunks and their metadata to ensure your pipeline is working correctly.
+
+### Part 2: The Memory - Vector Database and Embeddings (20 points)
+
+-   **Choose Your Embedding Model:** The choice of embedding model has a huge impact on retrieval quality.
+    -   **Select a model.** Good candidates for technical text include `BAAI/bge-small-en-v1.5` or the classic `sentence-transformers/all-mpnet-base-v2`.
+    -   **Justify your choice.** Why is this model a good fit for technical jargon compared to a more generic model?
+-   **Build the Vector Store:**
+    -   Set up and populate a `ChromaDB` vector store.
+    -   **Make it persistent.** Save the database to disk so you don't have to re-process the PDF every time you run your app.
+-   **Test Retrieval:** Write a simple test function to perform a similarity search on a few sample queries (e.g., "how to change the coolant?"). Does it retrieve relevant-looking chunks?
+
+### Part 3: The Brain - The RAG Pipeline (30 points)
+
+-   **Build the `RetrievalQA` Chain:** Use LangChain to construct the end-to-end pipeline.
+-   **Design a Powerful Prompt:** This is where you control the LLM's personality and behavior. Your prompt must explicitly instruct the LLM to:
+    1.  Act as an expert assistant.
+    2.  Answer the question based *only* on the provided context.
+    3.  If the answer is not in the context, state that clearly and do not hallucinate.
+-   **Select a Generator Model:** `google/flan-t5-base` is a good, efficient choice.
+-   **Enable Source Citation:** Ensure your `RetrievalQA` chain is configured with `return_source_documents=True`.
+
+### Part 4: The Report Card - Evaluation (15 points)
+
+How do you know if your system is any good? You test it.
+
+-   **Create an Evaluation Set:** Based on the manual, create a CSV or JSON file with at least 10 realistic question/ground-truth answer pairs.
+-   **Measure Retrieval Accuracy:** For each question, programmatically check if the retrieved documents contain the information needed to answer it. Calculate a "hit rate."
+-   **Measure Generation Quality:** Manually review the LLM's generated answers. Are they:
+    -   **Faithful?** (Do they stick to the source material?)
+    -   **Accurate?** (Are they correct?)
+    -   **Concise?** (Do they get to the point?)
+-   **Document Your Findings:** Write a short `evaluation_report.md` summarizing your results, including what worked well and what could be improved.
+
+### Part 5: The Interface - Interactive Demo (10 points)
+
+-   **Build a simple `Streamlit` or `Gradio` interface.**
+-   The UI must have:
+    -   A text box for the user to enter their question.
+    -   A button to submit the query.
+    -   A clear display area for the generated answer.
+    -   A **"Sources" section** that displays the `page_content` and `page` number of the source documents the LLM used. This is the most important part of the UI.
+
+---
+
+##  Grading Rubric
 
 | Component | Points | Criteria |
-|-----------|--------|----------|
-| Document Processing | 25 | Quality & justification of chunking, metadata extraction. |
-| Vector Database | 20 | Justification of embedding model, efficient indexing. |
-| RAG Pipeline | 30 | Accuracy, relevance, and faithfulness of responses. Quality of the prompt. |
-| Evaluation | 15 | Comprehensive testing, insightful analysis of results. |
-| Demo & Citation | 10 | UX, functionality, and proper source citation. |
-
----
-
-## 💡 Implementation Guide
-
-The code snippets from the notebook `08_rag_implementation.ipynb` are a great starting point. Refer to them for using `TextLoader`, `Chroma`, and `RetrievalQA`.
-
-### Key Challenge: Prompting for Factual Grounding
-Your prompt is critical. A good starting point:
-
-```
-"Use the following pieces of context to answer the user's question. If you don't know the answer, just say that you don't know, don't try to make up an answer. Provide the answer and then include the page number from the source document."
-
-Context:
-{context}
-
-Question:
-{question}
-
-Helpful Answer:
-```
+|---|---|---|
+| **Document Processing** | 25 | Justification of chunking strategy, correct metadata extraction. |
+| **Vector Database** | 20 | Justification of embedding model choice, persistent and efficient indexing. |
+| **RAG Pipeline** | 30 | Quality of the prompt, faithfulness and accuracy of the generated answers. |
+| **Evaluation** | 15 | Thoroughness of the test set, insightful analysis in the report. |
+| **Demo & Citation** | 10 | A functional and intuitive UI with **clear and accurate source citation**. |
 
 ---
 
 ## 🚀 Bonus Challenges (+10 points each)
 
-1.  **Advanced Retrieval:** Implement a hybrid search that combines keyword-based search (like BM25) with your semantic search to improve retrieval for part numbers or specific error codes.
-2.  **Conversational Memory:** Extend your app to handle follow-up questions using `ConversationBufferMemory`.
-3.  **Auto-Evaluation with RAGAS:** Use the `RAGAS` library to automatically evaluate your pipeline's performance on metrics like `faithfulness`, `answer_relevancy`, and `context_recall`.
-4.  **Handling Tables:** Many manuals contain tables. Implement a strategy to parse and represent tabular data effectively for the RAG system.
+1.  **Advanced Retrieval: Hybrid Search:** Combine your dense vector search with a sparse, keyword-based search (like `BM25`) to improve retrieval for specific part numbers or error codes that semantic search might miss.
+2.  **Conversational Memory:** Use LangChain's `ConversationBufferMemory` to allow your app to remember the context of the conversation and answer follow-up questions.
+3.  **Automated Evaluation with RAGAS:** Integrate the `RAGAS` library to automatically score your pipeline on metrics like `faithfulness`, `answer_relevancy`, and `context_recall`.
+4.  **Handling Tables:** Technical manuals are full of tables. Research and implement a strategy to parse tables from the PDF and represent them in a way that your RAG system can effectively use (e.g., convert them to markdown or a structured string).
 
 ---
 
-## 📦 Submission Structure
+## 📦 Recommended Project Structure
 
-Organize your project clearly. A recommended structure:
 ```
 homework/week-05-06/
-├── README.md
-├── rag_app.py         # Your Streamlit/Gradio app
-├── rag_pipeline.ipynb # Notebook for development
+├── README.md                # Your main project write-up
+├── app.py                   # Your Streamlit/Gradio application
+├── rag_pipeline.ipynb       # Your development notebook
 ├── requirements.txt
 ├── data/
-│   └── sample_manual.pdf
+│   └── haas_vf2_manual.pdf  # The provided technical manual
 └── evaluation/
-    ├── test_qna.csv
-    └── evaluation_report.md
+    ├── test_suite.csv       # Your question-answer evaluation set
+    └── evaluation_report.md # Your analysis of the system's performance
 ```
-
----
-
-## ✅ Submission Checklist
-
-- [ ] RAG pipeline is fully functional and answers questions about the sample manual.
-- [ ] Evaluation report is complete with metrics and analysis.
-- [ ] The demo app works and correctly cites sources.
-- [ ] Your code is well-documented and follows best practices.
-- [ ] The main `README.md` for your submission is comprehensive.
-- [ ] All code is committed to your GitHub repository.
 
 ---
 
 <div align="center">
-Week 5-6 Homework | Building the Brain of the Manufacturing Copilot 🧠
+<h3>This is your chance to build a truly useful AI tool. Good luck!</h3>
 </div>
