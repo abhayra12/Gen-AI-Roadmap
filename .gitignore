@@ -102,3 +102,5 @@ Desktop.ini
 service-account-key.json
 *.json.gcp
 .gcloud/
+
+COURSE_COHERENCE_ANALYSIS.md
