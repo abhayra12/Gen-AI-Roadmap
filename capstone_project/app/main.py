@@ -83,15 +83,69 @@ async def diagnose_problem(
     """
     Main endpoint to diagnose a manufacturing problem.
     
-    This endpoint orchestrates the Vision and RAG agents to provide a comprehensive
-    analysis and recommendation. It requires a valid technician auth token.
+    This endpoint orchestrates all agents (Vision, RAG, Report, ML, Analytics) 
+    to provide a comprehensive analysis and recommendation. 
+    Requires a valid technician auth token.
     """
     logger.info(
         f"Received diagnosis request from user '{user_id}' for plant '{payload.plant_id}'.",
         extra={"trace_id": getattr(payload, 'trace_id', None)}
     )
     
-    # In the real project, this is where you'd call your LangGraph `app.ainvoke()`
+    # Call LangGraph orchestrator which runs all agents
     response = await run_copilot_inference(payload)
     
     return response
+
+
+@app.post("/v1/predict", tags=["ML Agent"])
+async def predict_failure(
+    equipment_id: str,
+    sensor_data: dict,
+    user_id: str = Depends(authorize_request)
+):
+    """
+    Predict equipment failure using ML models.
+    
+    This endpoint provides predictive maintenance insights using trained ML models.
+    Returns failure probability, risk level, and maintenance recommendations.
+    """
+    try:
+        from .ml_agent import ml_agent
+        result = await ml_agent.predict_failure(equipment_id, sensor_data)
+        return result
+    except ImportError:
+        return {
+            "error": "ML Agent not available. Train the model first: python ml_models/predictive_maintenance/train_model.py",
+            "equipment_id": equipment_id
+        }
+    except Exception as e:
+        logger.error(f"ML prediction error: {e}")
+        return {"error": str(e), "equipment_id": equipment_id}
+
+
+@app.get("/v1/analytics/{equipment_id}", tags=["Analytics Agent"])
+async def get_analytics(
+    equipment_id: str,
+    time_range: str = "last_30_days",
+    user_id: str = Depends(authorize_request)
+):
+    """
+    Get historical performance analytics for equipment.
+    
+    Returns performance trends, KPIs, and data-driven insights.
+    Time range options: last_7_days, last_30_days, last_90_days
+    """
+    try:
+        from .analytics_agent import analytics_agent
+        result = await analytics_agent.analyze_performance_trend(equipment_id, time_range)
+        return result
+    except ImportError:
+        return {
+            "error": "Analytics Agent not available",
+            "equipment_id": equipment_id,
+            "note": "Running in mock mode. Connect BigQuery for real data."
+        }
+    except Exception as e:
+        logger.error(f"Analytics error: {e}")
+        return {"error": str(e), "equipment_id": equipment_id}
