@@ -34,8 +34,23 @@ requests==2.31.0
 # Monitoring & Logging
 prometheus-fastapi-instrumentator==6.1.0
 
+# Machine Learning (for ML Agent)
+scikit-learn==1.3.2
+xgboost==2.0.2
+joblib==1.3.2
+
+# Data Processing (for Analytics Agent)
+pandas==2.1.3
+numpy==1.26.2
+
+# Data Engineering (optional - for full stack)
+# confluent-kafka==2.3.0  # Uncomment for Kafka streaming
+# pyarrow==14.0.1  # Uncomment for Parquet files
+# google-cloud-bigquery==3.14.0  # Uncomment for BigQuery
+
 # Note: torch removed - using HuggingFace Inference API instead of local models
 # This allows running on CPU-only machines without heavy GPU requirements
+# For full data engineering + ML stack, use requirements-full.txt
 
 # Development & Testing (optional - install with -r requirements-dev.txt)
 # pytest==7.4.3
