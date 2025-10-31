@@ -31,6 +31,9 @@ class DiagnosisResponse(BaseModel):
     confidence_score: float = Field(
         ..., ge=0.0, le=1.0, description="Overall confidence in the recommendation."
     )
+    # New ML and Analytics insights (optional, will be added if available)
+    ml_prediction: Optional[dict] = Field(None, description="ML Agent prediction results")
+    analytics_insights: Optional[dict] = Field(None, description="Analytics Agent insights")
     safety_disclaimer: str = "Always follow standard safety procedures and consult a supervisor if unsure."
 
 class HealthStatus(BaseModel):
