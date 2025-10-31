@@ -11,6 +11,21 @@
 
 ---
 
+## 🎓 **Want to Build This from Scratch?**
+
+📚 **[See Complete Step-by-Step Guides →](guides/)**
+
+Learn by building! We've created comprehensive guides to help you implement this project from an empty folder:
+- 🚀 **[guides/START_HERE.md](guides/START_HERE.md)** - Navigation and overview
+- 🏗️ **[guides/BUILD_FROM_SCRATCH_GUIDE.md](guides/BUILD_FROM_SCRATCH_GUIDE.md)** - Phases 1-7 (Foundation & Agents)
+- 🔗 **[guides/BUILD_FROM_SCRATCH_GUIDE_PART2.md](guides/BUILD_FROM_SCRATCH_GUIDE_PART2.md)** - Phases 8-12 (Integration & Deploy)
+- 📊 **[guides/IMPLEMENTATION_ROADMAP.md](guides/IMPLEMENTATION_ROADMAP.md)** - Visual diagrams
+- ⚡ **[guides/QUICK_START_REFERENCE.md](guides/QUICK_START_REFERENCE.md)** - Quick commands
+
+**Total Time**: 9-12 hours | **Difficulty**: Intermediate | **12 Detailed Phases**
+
+---
+
 ## 📋 Table of Contents
 
 1. [Overview](#-overview)
